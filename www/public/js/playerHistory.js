@@ -1,4 +1,4 @@
-angular.module('Ketch').controller('gameController', ['$scope', '$http', function($scope, $http) {
+angular.module('Ketch').controller('playerHistory', ['$scope', '$http', function($scope, $http) {
 
 	
 	

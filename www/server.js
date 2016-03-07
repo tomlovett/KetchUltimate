@@ -17,18 +17,18 @@ app.use(express.static(__dirname + '/Public'));
 
 
 // Routes \\
-// app.get('/', function(req, res) {
-//   res.sendFile('index.html', {root: './public/html'})
-// })
-
-// app.get('/quiz', function(req, res) {
-// 	res.sendFile('quiz.html', {root: './public/html'})
-// })
+app.get('/', function(req, res) {
+  res.sendFile('index.html', {root: './'})
+})
 
 // API \\
-// app.post('/api/translate', controller.apiTranslate)
-// app.post('/api/loadNext',  controller.nextQuestion)
+app.post('/api/updateGame', controller.updateGame)
+app.post('/api/closeGame',  controller.closeGame)
 
+app.post('/api/newPlayer',  controller.newPlayer)
+app.post('/api/editPlayer', controller.editPlayer)
+
+app.post('/api/passRatings', controller.passRatings)
 
 // Creating Server and Listening for Connections \\
 var port = 3000
