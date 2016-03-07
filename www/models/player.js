@@ -5,10 +5,11 @@ var playerSchema = mongoose.Schema({
 	lastName    : String,
 	handle      : String,
 	gender      : String,
-	email       : { type: String, default: null },
-	teams       : { type: Array, default: [] }, // array of team id's
-	gameHistory : { type: Array, default: [] },
-	pointHistory: { type: Array, default: [] },
+	email       : { type: String, default: '' },
+	teams       : { type: Array,  default: [] }, // array of team id's
+	gameHistory : { type: Array,  default: [] },
+	pointHistory: { type: Array,  default: [] },
+	careerStats : { type: Object, default: {} }
 })
 
 module.exports = mongoose.model('player', playerSchema)
