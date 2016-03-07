@@ -1,47 +1,52 @@
 var Player = require('../models/player.js')
 
+var loadFromDB = function(req, res, func) {
+	Player.findById(req.body.playerID, function(err, player) {
+		if (err)  res.send(err)
+		else	  func(player)
+	})
+}
+
+var saveToDB = function(req, res, player) {
+	player.save(function(err, savedPlayer) {
+		if (err)  res.send(err)
+		else      res.send(200)
+	})
+}
+
 var newPlayer = function(req, res) {
 	var player = new Player({
 		firstName : req.body.firstName,
 		lastName  : req.body.lastName,
 		handle    : req.body.handle,
+		gender    : req.body.gender,
 		email     : req.body.email || null,
 		teams     : req.body.teams,
 	})
 	player.save(function(err, storedPlayer) {
-		console.log('new player created: ', storedPlayer)
 		res.send(storedPlayer._id)
 	})
 }
 
 var editPlayer = function(req, res) {
-	Player.findById(req.body.playerID, function(err, player) {
-		if (err) {
-			res.send(err)
-		} else {
-			player[firstName] = req.body.firstName,
-			player[lastName]  = req.body.lastName,
-			player[handle]    = req.body.handle,
-			player[email]     = req.body.email || null,
-			res.send(200)
-		}
+	loadFromDB(req, res, function(player) {
+		player[firstName] = req.body.firstName,
+		player[lastName]  = req.body.lastName,
+		player[handle]    = req.body.handle,
+		player[gender]    = req.body.gender
+		player[email]     = req.body.email || null,
+		saveToDB(req, res, player)
 	})
 }
 
-var loadPlayers = function(req, res) {
-	var playerDocs = {}
-	req.body.players.forEach(function(playerID) {
-		Player.findById(playerID, function(err, doc) {
-			if (doc) {
-				playerDocs[playerID] = doc
-			}
-		})
+var loadPlayer = function(req, res) {
+	loadFromDB(req, res, function(player) {
+		res.send(player)
 	})
-	res.send(playerDocs)
 }
 
 module.exports = {
-	newPlayer   : newPlayer,
-	editPlayer  : editPlayer,
-	loadPlayers : loadPlayers
+	newPlayer  : newPlayer,
+	editPlayer : editPlayer,
+	loadPlayer : loadPlayer
 }

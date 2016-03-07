@@ -21,8 +21,8 @@ app.use(express.static(__dirname + '/Public'));
 
 // including passport; do in separate passport config module
 
-mongoose.connect('mongodb://localhost/players')
-mongoose.connect('mongodb://localhost/teams')
+// mongoose.connect('mongodb://localhost/players')
+// mongoose.connect('mongodb://localhost/teams')
 
 // Routes \\
 app.get('/', function(req, res) {
@@ -33,8 +33,8 @@ app.get('/', function(req, res) {
 app.post('/api/updateGame', mainCtrl.updateGame)
 app.post('/api/closeGame',  mainCtrl.closeGame)
 
-app.post('/api/newTeam', teamCtrl.newTeam)
-app.get('/api/loadTeam',  teamCtrl.loadTeam)
+app.post('/api/createTeam', teamCtrl.createTeam)
+app.post('/api/loadTeam',  teamCtrl.loadTeam)
 app.post('/api/addToRoster', teamCtrl.addToRoster)
 app.post('/api/removeFromRoster', teamCtrl.removeFromRoster)
 app.post('/api/makeCaptain', teamCtrl.makeCaptain)
@@ -42,9 +42,9 @@ app.post('/api/makeCaptain', teamCtrl.makeCaptain)
 // "load" functions
 app.post('/api/newPlayer',  playerCtrl.newPlayer)
 app.post('/api/editPlayer', playerCtrl.editPlayer)
-app.get('/api/loadPlayers', playerCtrl.loadPlayers)
+app.post('/api/loadPlayer', playerCtrl.loadPlayer)
 
-app.post('/api/passRatings', ratingCtrl.passRatings)
+// app.post('/api/passRatings', ratingCtrl.passRatings)
 
 // Creating Server and Listening for Connections \\
 var port = 3000

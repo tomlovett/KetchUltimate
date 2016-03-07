@@ -4,7 +4,7 @@ var teamSchema = mongoose.Schema({
 	name        : String,
 	roster      : Array, // array of player id's
 	captains    : Array,
-	gameHistory : { type: Array, default: [] }
+	gameHistory : { type: Array, default: [] },
 	liveGame    : Object
 	// misc : Object,
 })
