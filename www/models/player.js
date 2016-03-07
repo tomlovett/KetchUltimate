@@ -6,7 +6,7 @@ var playerSchema = mongoose.Schema({
 	handle      : String,
 	email       : String,
 	teams       : Array, // array of team id's
-	gameHistory : Array
+	gameHistory : {type: Array, default: []}
 })
 
 module.exports = mongoose.model('player', playerSchema)

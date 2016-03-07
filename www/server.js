@@ -3,7 +3,12 @@ var express    = require('express'),
     bodyParser = require('body-parser'),
     logger     = require('morgan'),
     mongoose   = require('mongoose'),
-    controller = require('./controller/controller.js')
+    passport   = require('passport')
+
+var mainCtrl   = require('./controllers/mainCtrl.js'),
+    playerCtrl = require('./controllers/playerCtrl.js'),
+    teamCtrl   = require('./controllers/teamCtrl.js'),
+    ratingCtrl = require('./controllers/ratingCtrl.js')
 
 // Create Express App Object \\
 var app = express();
@@ -13,8 +18,11 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/Public'));
-// mongoose.connect('mongodb://localhost/quizzes')
 
+// including passport; do in separate passport config module
+
+mongoose.connect('mongodb://localhost/players')
+mongoose.connect('mongodb://localhost/teams')
 
 // Routes \\
 app.get('/', function(req, res) {
@@ -22,13 +30,21 @@ app.get('/', function(req, res) {
 })
 
 // API \\
-app.post('/api/updateGame', controller.updateGame)
-app.post('/api/closeGame',  controller.closeGame)
+app.post('/api/updateGame', mainCtrl.updateGame)
+app.post('/api/closeGame',  mainCtrl.closeGame)
 
-app.post('/api/newPlayer',  controller.newPlayer)
-app.post('/api/editPlayer', controller.editPlayer)
+app.post('/api/newTeam', teamCtrl.newTeam)
+app.get('/api/loadTeam',  teamCtrl.loadTeam)
+app.post('/api/addToRoster', teamCtrl.addToRoster)
+app.post('/api/removeFromRoster', teamCtrl.removeFromRoster)
+app.post('/api/makeCaptain', teamCtrl.makeCaptain)
 
-app.post('/api/passRatings', controller.passRatings)
+// "load" functions
+app.post('/api/newPlayer',  playerCtrl.newPlayer)
+app.post('/api/editPlayer', playerCtrl.editPlayer)
+app.get('/api/loadPlayers', playerCtrl.loadPlayers)
+
+app.post('/api/passRatings', ratingCtrl.passRatings)
 
 // Creating Server and Listening for Connections \\
 var port = 3000
