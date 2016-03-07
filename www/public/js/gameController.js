@@ -3,10 +3,16 @@ angular.module('Ketch').controller('gameController', ['$scope', '$http', 'utilit
 	// Team.importTeam
 	// a local player._id -> handle/representation
 
+	console.log('gameController connected')
+
 	$scope.subMode = true
 
 	$scope.selected = ''
 	$scope.metric   = ''
+
+	$scope.game = utility.Game()
+	console.log($scope.game)
+	console.log(utility)
 
 	$scope.score = function(result) {
 		$scope.game.recordPoint(result)
@@ -37,23 +43,19 @@ angular.module('Ketch').controller('gameController', ['$scope', '$http', 'utilit
 	}
 
 	$scope.fire = function(index, from, to) {
-		if ($scope.subMode) {
-			sub(index, from, to)
-		} else {
-			select(index, from)
-		}
+		if ($scope.subMode) { sub(index, from, to) }
+		else { select(index, from) }
 	}
 
 	var sub = function(index, from, to) {
-		var player = from.splice(index, 1)
-		to.push(player[0])
+		var player = from.splice(index, 1)[0]
+		to.push(player)
 		$scope.team.sort()
 	}
 
 	var select = function(index, group) {
-		if ($scope.selected) {
-			$scope.selected = ''  // un-selects player
-		} else {
+		if ($scope.selected) { $scope.selected = '' }
+		else {
 			$scope.selected = group[index]
 			if ($scope.metric) {
 				recordStat($scope.selected, $scope.metric)
@@ -62,9 +64,8 @@ angular.module('Ketch').controller('gameController', ['$scope', '$http', 'utilit
 	}
 
 	$scope.bonusStat = function(metric) {
-		if ($scope.metric) {
-			$scope.metric = ''
-		} else {
+		if ($scope.metric) { $scope.metric = '' }
+		else {
 			$scope.metric = metric
 			if ($scope.selected) {
 				recordStat($scope.selected, $scope.metric)
@@ -89,9 +90,10 @@ angular.module('Ketch').controller('gameController', ['$scope', '$http', 'utilit
 	
 }])
 
-angular.module('Ketch').factory('utility', ['$http'], function($http) {
+angular.module('Ketch').factory('utility', [], function() {
 
 	function Team(teamObj) {
+		// this = teamObj // eh?
 		this.m = { bench: [], field: [] }
 		this.w = { bench: [], field: [] }
 	}
@@ -99,18 +101,15 @@ angular.module('Ketch').factory('utility', ['$http'], function($http) {
 	Team.prototype = {
 		constructor: Team,
 		import: function(player) {
-			if (player.gender == 'm') {
-				this.m.bench.push(player)
-			} else {
-				this.w.bench.push(player)
-			}
+			if (player.gender == 'm') this.m.bench.push(player)
+			else       	              this.w.bench.push(player)
 			this.sort()
 		},
 		importTeam: function(teamObj) {
 			teamObj.roster.forEach(function(player){
 				this.import(player)
 			})
-		}
+		},
 		addToRoster: function(player) {
 			$http.post('/api/addToRoster', player)
 				.then(function(returnData) {
@@ -145,12 +144,12 @@ angular.module('Ketch').factory('utility', ['$http'], function($http) {
 		}
 	}
 
-	function Metric(player, type) = {
+	function Metric(player, type) {
 		this.player = player
 		this.type   = type
 	}
 
-	function Game() = {
+	function Game() {
 		this.score = [0, 0]
 		this.pointHistory = []
 		this.currentPoint = Point(1)
@@ -166,7 +165,7 @@ angular.module('Ketch').factory('utility', ['$http'], function($http) {
 			this.updatePlayerPoints(this.currentPoint)
 			this.currentPoint = new Point(result)
 		},
-		updateScore = function(result) {
+		updateScore: function(result) {
 			if (result === 1)  { this.score[0] += 1 }
 			else			   { this.score[1] += 1 }
 		}

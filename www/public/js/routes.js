@@ -3,7 +3,7 @@ angular.module('Ketch')
 
 		$routeProvider
 			.when('/game', {
-				templateUrl : '/views/game.html',
+				templateUrl : 'views/game.html',
 				controller  : 'gameController'
 			})
 			.when('/manageTeam' , {
@@ -34,4 +34,5 @@ angular.module('Ketch')
 				templateUrl : 'views/ratingMode',
 				controller  : 'ratingMode'
 			})
+
 	}])

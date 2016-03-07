@@ -17,7 +17,7 @@ var app = express();
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(__dirname + '/Public'));
+app.use(express.static(__dirname + '/public'));
 
 // including passport; do in separate passport config module
 
@@ -28,6 +28,10 @@ app.use(express.static(__dirname + '/Public'));
 app.get('/', function(req, res) {
   res.sendFile('index.html', {root: './'})
 })
+
+// app.get('/game', function(req, res) {
+// 	res.sendFile('game.html', {root: './public/views'})
+// })
 
 // API \\
 app.post('/api/updateGame', mainCtrl.updateGame)

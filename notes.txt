@@ -1,0 +1,13 @@
+separating server/back-end from the views that the phone owns
+split into server and phone folders
+
+server: controllers, models, server.js
+phone owns views and presentation
+
+"hybrid mobile app"
+
+http requests to "http://www.ketch.es/about" or "http://localhost:3000"
+ionic server and node server will be on different ports
+templateUrl to full length thing
+
+only AJAX requests between server/phone; server does API
