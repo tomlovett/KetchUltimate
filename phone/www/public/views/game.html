@@ -1,60 +1,61 @@
-<div class='scoreboard'>
-	<div class="score col-1-4">{{game.score[0]}}</div>
-	<div class="score col-1-4"> - </div>
-	<div class="score col-1-4">{{game.score[1]}}</div>
-	<br>
-	<div class="team-name col-1-4">{{team.name}}</div>
-	<div class="timer col-1-4"></div>
-	<div class="team-name col-1-4">THEM</div>
+<div class="row">
+	<div class="col">{{game.score[0]}}</div>
+	<div class="col col-20"> - </div>
+	<div class="col">{{game.score[1]}}</div>
+</div>
+<div class="row">
+	<div class="col">{{team.name}}</div>
+	<div class="col col-20"></div>
+	<div class="col">THEM</div>
 </div>
 
-<div class='scores-subs'> 
-	<div class='col-1-4'>
-		<button class='record-score us' ng-hide='subMode' ng-click="score(1)">We scored!!</button>
+<div class="row"> 
+	<div class="col">
+		<button class="button button-balanced" ng-hide="subMode" ng-click="score(1)">We scored!!</button>
 	</div>
-	<div class='col-1-4'>
-		<button ng-show='subMode' ng-click='doneSubbing()'>Done Substitutions</button>
+	<div class="col">
+		<button class="button" ng-show="subMode" ng-click="doneSubbing()">Done Substitutions</button>
 	</div>
-	<div class='col-1-4'>
-		<button class='record-score them' ng-hide='subMode' ng-click="score(-1)">They scored...</button>
+	<div class="col">
+		<button class="button button-assertive" ng-hide="subMode" ng-click="score(-1)">They scored...</button>
 	</div>
 </div>
 
-<div class='roster-container'>
-	<div>
-		<div class='col-1-4'>Bench</div>
-		<div class='col-1-3'></div>
-		<div class='col-1-4'>Field</div>
-	</div>
-	<div class='bench men' ng-show="subMode">
+<div class="row">
+	<div class="col-33">Bench</div>
+	<div class="col-33 col-offset-33">Field</div>
+</div>
+
+<div class="row">
+	<div class="col col-25" ng-show="subMode">
 		<ul>
 			<li class="male" ng-repeat="guy in team.m.bench" ng-click="fire($index, team.m.bench, team.m.field)">{{guy.handle}}</li>
 		</ul>
+		<div ng-hide="subMode">
+			<button class="button button-assertive" ng-click="bonusStat('throwaway')">THROWAWAY</button><br>
+			<button class="button button-assertive" ng-click="bonusStat('drop')">DROP</button><br>			<button class="button button-balanced" ng-click="bonusStat('D')">D (good!)</button><br>
+			<button class="button button-energized" ng-click="bonusStat('goldStar')">GOLD STAR</button>
+		</div>
 	</div>
-	<div class='bench women' ng-show="subMode">
+	<div class="col col-25" ng-show="subMode">
 		<ul>
 			<li class="female" ng-repeat="girl in team.w.bench" ng-click="fire($index, team.w.bench, team.w.field)">{{girl.handle}}</li>
 		</ul>
 	</div>
 
-	<div class='bench' id="field">
+	<div class="col col-25 col-offset-25" id="field">
 		<ul>
-			<li class='female' ng-repeat="player in team.w.field" ng-click="fire($index, team.w.field, team.w.bench)">{{player.handle}}</li>
+			<li class="female" ng-repeat="player in team.w.field" ng-click="fire($index, team.w.field, team.w.bench)">{{player.handle}}</li>
 		</ul>
 		<ul>
-			<li class='male' ng-repeat='player in team.m.field' ng-click="fire($index, team.m.field, team.m.bench)">{{player.handle}}</li>
+			<li class="male" ng-repeat="player in team.m.field" ng-click="fire($index, team.m.field, team.m.bench)">{{player.handle}}</li>
 		</ul>
 		<button ng-click="clearLine()" ng-show="subMode">Clear Line</button>
 	</div>
+
 </div>
 
-<div class='bonus-bar col-1-3' style="float: left" ng-hide="subMode">
-	<button ng-click="bonusStat('turn')">TURN (bad)</button><br>
-	<button ng-click="bonusStat('D')">D (good!)</button><br>
-	<button ng-click="bonusStat('goldStar')">GOLD STAR</button>
-</div>
-
-<div class="col-1-3" style="float: left" ng-hide='subMode'>
+<div class="col-1-3" style="float: left" ng-hide="subMode">
 	<p ng-show="selected">Selected: {{selected.handle}}</p>
 	<p ng-show="metric">Metric: {{metric}}</p>
 </div>

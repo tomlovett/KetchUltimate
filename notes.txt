@@ -1,8 +1,34 @@
-how to have data persist between the views?
+how to have data persist between the views? one $scope object or some other method?
+	through factories. objects and pointers. 
+	$scope.team = persist.team or globalData.team
 
-how to link up the js files?
-writing in bootstrap?
+how to structure the database? -> teams, players, player_ratings, players.have_rated
 
-how to structure the database? teams, players, player_ratings, players.have_rated
-
+Ionic:
 how to do ngRoute with local files?
+	these files are stored locally on the phone, correct?
+
+do I need all the links to JS files in index.html?
+
+logging people in, confirming permissions in requests to server without compromising security
+
+remove -> app.get('/', function(req, res) {
+  res.sendFile('index.html', {root: './'})
+}) 
+
+Misc:
+abstracting/isolating express routing
+
+passport through AJAX
+
+navbar controller
+
+alternating colors:
+  colors = [primary, secondary]
+  if (this.game !== above.game) { 
+     this.color = (this.color + 1) % 2
+  }
+
+pushing a new rating:
+	rating = ((ratings.length * rating) + newRating) / (ratings.length+1)
+	// less computation

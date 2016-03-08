@@ -102,8 +102,8 @@ angular.module('Ketch').factory('gameUtility', [], function() {
 	Team.prototype = {
 		constructor: Team,
 		import: function(player) {
-			if (player.gender == 'm') this.m.bench.push(player)
-			else       	              this.w.bench.push(player)
+			if (player.gender == 'm') { this.m.bench.push(player) }
+			else       	              { this.w.bench.push(player) }
 			this.sort()
 		},
 		importTeam: function(teamObj) {
