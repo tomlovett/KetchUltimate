@@ -1,28 +1,19 @@
 how to have data persist between the views? one $scope object or some other method?
 	through factories. objects and pointers. 
-	$scope.team = persist.team or globalData.team
+	$scope.team = globalData.team
+	loading from server, assigning to globalData
 
-how to structure the database? -> teams, players, player_ratings, players.have_rated
-
-Ionic:
-how to do ngRoute with local files?
-	these files are stored locally on the phone, correct?
-
-do I need all the links to JS files in index.html?
+database collections -> teams, players, player_ratings, rating_history
 
 logging people in, confirming permissions in requests to server without compromising security
 
-remove -> app.get('/', function(req, res) {
-  res.sendFile('index.html', {root: './'})
-}) 
-
-Misc:
-abstracting/isolating express routing
+abstracting/isolating express API routing
 
 passport through AJAX
 
 navbar controller
 
+Misc:
 alternating colors:
   colors = [primary, secondary]
   if (this.game !== above.game) { 
@@ -30,5 +21,6 @@ alternating colors:
   }
 
 pushing a new rating:
+	ratings.push(newRating)
 	rating = ((ratings.length * rating) + newRating) / (ratings.length+1)
 	// less computation

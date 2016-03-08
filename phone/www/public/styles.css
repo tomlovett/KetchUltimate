@@ -1,0 +1,10 @@
+body {
+	text-align: center;
+	background-color: black;
+	color: white;
+}
+
+.scoreboard {
+	font-size: 5em;
+	font-weight: bold;
+}

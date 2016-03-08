@@ -1,0 +1,27 @@
+<div ng-show="createPlayer">
+
+	<label class="item item-input">
+		<input type="text" ng-model="player.firstName" placeholder="First Name*" required>
+	</label>
+
+	<label class="item item-input">
+		<input type="text" ng-model="player.lastName"  placeholder="Last Name*" required>
+	</label>
+
+	<label class="item item-input">
+		<input type="text" ng-model="player.handle" placeholder="Nickname">
+	</label>
+
+	<label class="item item-input">
+		<input type="text" ng-model="player.email" placeholder="Email">
+	</label>
+	<p>(Email is not immediately required, but it will make it much easier to link up your players in the future!)</p>
+
+	<button class="button button-positive" ng-click="submitPlayer('m')">New Guy</button>
+	<button class="button button-assertive" ng-click="submitPlayer('f')">New Girl</button>
+
+	<p ng-show="errorMessage">{{errorMessage}}</p>
+
+</div>
+
+<!-- show players, click to edit -->

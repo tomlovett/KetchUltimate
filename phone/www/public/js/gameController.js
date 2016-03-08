@@ -11,7 +11,7 @@ angular.module('Ketch').controller('gameController', ['$scope', '$http', 'gameUt
 	$scope.selected = ''
 	$scope.metric   = ''
 
-	$scope.game = gameUtility.Game()
+	$scope.game = new gameUtility.Game
 	console.log($scope.game)
 	console.log(gameUtility)
 
@@ -91,7 +91,7 @@ angular.module('Ketch').controller('gameController', ['$scope', '$http', 'gameUt
 	
 }])
 
-angular.module('Ketch').factory('gameUtility', [], function() {
+angular.module('Ketch').factory('gameUtility', function() {
 
 	function Team(teamObj) {
 		// this = teamObj // eh?
