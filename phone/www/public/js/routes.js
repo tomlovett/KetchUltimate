@@ -3,35 +3,35 @@ angular.module('Ketch')
 
 		$routeProvider
 			.when('/game', {
-				templateUrl : 'views/game.html',
+				templateUrl : '/public/views/game.html',
 				controller  : 'gameController'
 			})
 			.when('/manageTeam' , {
-				templateUrl : 'views/manageTeam.html',
+				templateUrl : '/public/views/manageTeam.html',
 				controller  : 'manageTeam'
 			})
 			.when('/teamHistory/:team' , {
-				templateUrl : 'views/teamHistory.html',
+				templateUrl : '/public/views/teamHistory.html',
 				controller  : 'teamHistory'
 			})
 			.when('/playerHistory/:player' , {
-				templateUrl : 'views/playerHistory.html',
+				templateUrl : '/public/views/playerHistory.html',
 				controller  : 'playerHistory'
 			})
 			.when('/scoreSummary/:game' , {
-				templateUrl : 'views/scoreSummary',
+				templateUrl : '/public/views/scoreSummary',
 				controller  : 'scoreSummary'
 			})
 			.when('/teamStats/:team/:game' , {
-				templateUrl : 'views/teamStats.html',
+				templateUrl : '/public/views/teamStats.html',
 				controller  : 'teamStats'
 			})
 			.when('/playerStats/:player/:game' , {
-				templateUrl : 'views/playerStats',
+				templateUrl : '/public/views/playerStats',
 				controller  : 'playerStats'
 			})
 			.when('/ratingMode' , {
-				templateUrl : 'views/ratingMode',
+				templateUrl : '/public/views/ratingMode',
 				controller  : 'ratingMode'
 			})
 

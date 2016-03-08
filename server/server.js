@@ -43,7 +43,6 @@ app.post('/api/addToRoster', teamCtrl.addToRoster)
 app.post('/api/removeFromRoster', teamCtrl.removeFromRoster)
 app.post('/api/makeCaptain', teamCtrl.makeCaptain)
 
-// "load" functions
 app.post('/api/newPlayer',  playerCtrl.newPlayer)
 app.post('/api/editPlayer', playerCtrl.editPlayer)
 app.post('/api/loadPlayer', playerCtrl.loadPlayer)

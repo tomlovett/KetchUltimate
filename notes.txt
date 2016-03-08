@@ -1,13 +1,8 @@
-separating server/back-end from the views that the phone owns
-split into server and phone folders
+how to have data persist between the views?
 
-server: controllers, models, server.js
-phone owns views and presentation
+how to link up the js files?
+writing in bootstrap?
 
-"hybrid mobile app"
+how to structure the database? teams, players, player_ratings, players.have_rated
 
-http requests to "http://www.ketch.es/about" or "http://localhost:3000"
-ionic server and node server will be on different ports
-templateUrl to "http://(...)"
-
-only AJAX requests between server/phone; server does API
+how to do ngRoute with local files?

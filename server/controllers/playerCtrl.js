@@ -1,5 +1,6 @@
 var Player = require('../models/player.js')
 
+// Abstractions
 var loadFromDB = function(req, res, func) {
 	Player.findById(req.body.playerID, function(err, player) {
 		if (err)  res.send(err)
@@ -14,6 +15,7 @@ var saveToDB = function(req, res, player) {
 	})
 }
 
+// API functionality
 var newPlayer = function(req, res) {
 	var player = new Player({
 		firstName : req.body.firstName,

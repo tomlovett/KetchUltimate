@@ -1,5 +1,6 @@
 var Team   = require('../models/team.js')
 
+// Abstractions
 var loadFromDB = function(req, res, func) {
 	Team.findById(req.body.teamID, function(err, team) {
 		if (err) res.send(err)
@@ -14,6 +15,7 @@ var saveToDB = function(req, res, team) {
 	})
 }
 
+// API Functionality
 var createTeam = function(req, res) {
 	var team = new Team({
 		name : req.body.name

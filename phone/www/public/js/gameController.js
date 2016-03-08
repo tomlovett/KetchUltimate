@@ -1,7 +1,8 @@
-angular.module('Ketch').controller('gameController', ['$scope', '$http', 'utility', function($scope, $http, utility) {
+angular.module('Ketch').controller('gameController', ['$scope', '$http', 'gameUtility', function($scope, $http, gameUtility) {
 
 	// Team.importTeam
-	// a local player._id -> handle/representation
+	// nameKey[player._id] = player.handle
+		// processing function
 
 	console.log('gameController connected')
 
@@ -10,9 +11,9 @@ angular.module('Ketch').controller('gameController', ['$scope', '$http', 'utilit
 	$scope.selected = ''
 	$scope.metric   = ''
 
-	$scope.game = utility.Game()
+	$scope.game = gameUtility.Game()
 	console.log($scope.game)
-	console.log(utility)
+	console.log(gameUtility)
 
 	$scope.score = function(result) {
 		$scope.game.recordPoint(result)
@@ -44,7 +45,7 @@ angular.module('Ketch').controller('gameController', ['$scope', '$http', 'utilit
 
 	$scope.fire = function(index, from, to) {
 		if ($scope.subMode) { sub(index, from, to) }
-		else { select(index, from) }
+		else 	            { select(index, from)  }
 	}
 
 	var sub = function(index, from, to) {
@@ -82,7 +83,7 @@ angular.module('Ketch').controller('gameController', ['$scope', '$http', 'utilit
 	$scope.clearLine = function() {
 		while ($scope.team.m.field.length > 0) {
 			sub(0, $scope.team.m.field, $scope.team.m.bench)
-		}
+		} // sub(index, from, to)
 		while ($scope.team.w.field.length > 0) {
 			sub(0, $scope.team.w.field, $scope.team.w.bench)
 		}
@@ -90,7 +91,7 @@ angular.module('Ketch').controller('gameController', ['$scope', '$http', 'utilit
 	
 }])
 
-angular.module('Ketch').factory('utility', [], function() {
+angular.module('Ketch').factory('gameUtility', [], function() {
 
 	function Team(teamObj) {
 		// this = teamObj // eh?
