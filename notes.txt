@@ -8,6 +8,6 @@ phone owns views and presentation
 
 http requests to "http://www.ketch.es/about" or "http://localhost:3000"
 ionic server and node server will be on different ports
-templateUrl to full length thing
+templateUrl to "http://(...)"
 
 only AJAX requests between server/phone; server does API
