@@ -1,3 +1,5 @@
+<!-- setting swiping right left with highlighted buttons -->
+
 <!-- View/Edit Roster - Add player -->
 <div class="row">
 	<div class="col">
@@ -37,6 +39,7 @@
 	<p ng-show="errorMessage">{{errorMessage}}</p>
 
 </div>
+
 <!-- Edit Teams -->
 <div ng-show="view['editTeams']">
 
@@ -52,29 +55,19 @@
 	</div>
 
 	<div ng-show="editing">
-	<!-- directly editing team -->
-		<div class="list">
-			<div class="item item-button-right">
-				{{$scope.editing.name}}
-				<button class="button button-positive button-small">edit</button>
-			</div>
-		</div>
-
-		<label class="item item-input">
-			<input type="text" ng-model="player.handle" placeholder="Nickname">
-		</label>
-
-		<label class="item item-input">
-			<input type="text" ng-model="player.handle" placeholder="Nickname">
-		</label>
+		<ul class="list">
+			<li class="item item-button-right">
+				{{editing.name}}
+				<button class="button button-positive" ng-click="edit(editing)">Done</button>
+			</li>
+		</ul>
 
 		<h3>Team Roster:</h3>
+		<!-- two columns: players on roster, available players -->
 	</div>
 
-<!-- phase two: show roster -->
-	<!-- edit roster, edit players -->
-
 </div>
+
 <!-- Create Team -->
 <div ng-show="view['createTeam']">
 	<label class="item item-input">

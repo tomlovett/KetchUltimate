@@ -31,9 +31,9 @@ angular.module('Ketch').controller('manageTeam', ['$scope', '$http', 'globalData
 		$scope.player.gender = gender
 		$http.post('http://localhost:3000/api/newPlayer', $scope.player)
 			.then(function(returnData) {
-				// success message
-				// cut out if returnData != 200/player
 				console.log(returnData)
+				var player = returnData.data
+				globalData.users[player._id] = player	
 			})
 		$scope.player = {}
 		// WANT: check email address, names even
@@ -48,18 +48,17 @@ angular.module('Ketch').controller('manageTeam', ['$scope', '$http', 'globalData
 	}
 
 	$scope.edit = function(teamObj) {
-		console.log('globalData.teams = ', globalData.teams)
-		if ($scope.editing == teamObj) { $scope.editing = null    }
-		else						   { $scope.editing = teamObj }
+		if ($scope.editing == teamObj) $scope.editing = null
+		else                           $scope.editing = teamObj
 	} 
 
 	$scope.createTeam = function() {
+		// needs error handling
 		$http.post('http://localhost:3000/api/createTeam', $scope.newTeam)
 			.then(function(returnData) {
 				globalData.teams.push(returnData.data)
 				$scope.newTeam = {}
 				$scope.createdMessage = 'Team created!'
-				console.log('globalData.teams: ', globalData.teams)
  			})
 	}
 

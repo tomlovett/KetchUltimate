@@ -1,7 +1,7 @@
 angular.module('Ketch').factory('globalData', function() {
 
 	user     = {}
-	mainTeam = {}
+	mainTeam = null
 	teams    = [] // pull from user.teams
 	players  = {}
 
