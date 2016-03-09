@@ -23,7 +23,6 @@ var newPlayer = function(req, res) {
 		handle    : req.body.handle,
 		gender    : req.body.gender,
 		email     : req.body.email || null,
-		teams     : req.body.teams,
 	})
 	player.save(function(err, storedPlayer) {
 		res.send(storedPlayer)

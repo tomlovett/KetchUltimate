@@ -13,6 +13,14 @@ var playerCtrl = require('./controllers/playerCtrl.js'),
 // Create Express App Object \\
 var app = express();
 
+var session = require('express-session')
+app.sessionMiddleware = session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+})
+app.use(app.sessionMiddleware)
+
 // Application Configuration \\
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -37,7 +45,8 @@ app.post('/api/newPlayer',  playerCtrl.newPlayer)
 app.post('/api/editPlayer', playerCtrl.editPlayer)
 app.post('/api/loadPlayer', playerCtrl.loadPlayer)
 
-// app.post('/api/passRatings', ratingCtrl.passRatings)
+app.post('/api/recordRatings', ratingCtrl.recordRatings)
+app.post('/api/recordAnswer',  ratingCtrl.recordAnswer)
 
 // Creating Server and Listening for Connections \\
 var port = 3000

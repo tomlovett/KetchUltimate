@@ -1,6 +1,8 @@
 setting up persistent data; passport -> req.user?
 
-database collections -> teams, players, player_ratings, rating_history
+database collections -> teams, players, playerRatings, rating_history
+
+actually running this through PhoneGap
 ---
 logging people in, confirming permissions in requests to server without compromising security
 

@@ -4,8 +4,6 @@ angular.module('Ketch').controller('gameController', ['$scope', '$http', 'gameUt
 	// nameKey[player._id] = player.handle
 		// processing function
 
-	console.log('gameController connected')
-
 	$scope.subMode = true
 
 	$scope.selected = ''
