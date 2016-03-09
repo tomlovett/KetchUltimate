@@ -21,13 +21,8 @@ app.use(express.static(__dirname + '/public'));
 
 // including passport; do in separate passport config module
 
-// mongoose.connect('mongodb://localhost/players') name of DB
-// mongoose.connect('mongodb://localhost/teams')
-
-// Routes \\
-// app.get('/', function(req, res) {
-//   res.sendFile('index.html', {root: './'})
-// }) // this gets removed?
+mongoose.connect('mongodb://localhost/players')
+mongoose.connect('mongodb://localhost/teams')
 
 // API \\
 app.post('/api/updateGame', mainCtrl.updateGame)

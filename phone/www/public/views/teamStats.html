@@ -1,0 +1,9 @@
+<!-- 
+" Tom +/- +5 Points played: 10 Time played: 5:01
+ Stats "
+ -->
+<div class="row" ng-repeat="player in team.roster">
+	<div class="col col-33">{{player.handle}}</div>
+	<div class="col col-50">Points played: {{player.pointsPlayed}}  Time played: {{player.timePlayed}}</div>
+	<div class="col col-17">+/- {{player.plusMinus}}</div>
+</div>

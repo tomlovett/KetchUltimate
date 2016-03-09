@@ -1,0 +1,9 @@
+<!-- 
+Mar 2  Flaming Croissants vs. SPAM    13-15
+ -->
+ <div class="row" ng-repeat="game in player.gameHistory" ng-click="expand($index)">
+	 <div class="col col-25">{{game.date}}</div>
+	 <div class="col col-50">{{game.team}}  vs. {{game.opponent}}</div>
+	 <div class="col col-25">{{game.score}}</div>
+	 <!-- <div ng-show="show[$index]">points played, time played, +/-, stats, viewGame</div> -->
+ </div>

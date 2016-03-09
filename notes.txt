@@ -1,10 +1,9 @@
-how to have data persist between the views? one $scope object or some other method?
-	through factories. objects and pointers. 
-	$scope.team = globalData.team
-	loading from server, assigning to globalData
+setting up persistent data
+
+fixing CORS issue
 
 database collections -> teams, players, player_ratings, rating_history
-
+---
 logging people in, confirming permissions in requests to server without compromising security
 
 abstracting/isolating express API routing
@@ -13,7 +12,7 @@ passport through AJAX
 
 navbar controller
 
-Misc:
+LATER, BRO:
 alternating colors:
   colors = [primary, secondary]
   if (this.game !== above.game) { 

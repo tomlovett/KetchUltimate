@@ -1,0 +1,9 @@
+<!-- 
+Mar 2   vs. SPAM    13-15
+ -->
+ <div class="row" ng-repeat="game in team.gameHistory" ng-click="expand($index)">
+	 <div class="col col-25">{{game.date}}</div>
+	 <div class="col col-50">vs. {{game.opponent}}</div>
+	 <div class="col col-25">{{game.score}}</div>
+	 <!-- <div ng-show="show[$index]">streaks, brokens, spirit, viewGame</div> -->
+ </div>
