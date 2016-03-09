@@ -23,3 +23,10 @@ pushing a new rating:
 	ratings.push(newRating)
 	rating = ((ratings.length * rating) + newRating) / (ratings.length+1)
 	// less computation
+
+
+I want to have a workable team to mess with so I can visualize functionality, spot errors; generally, see a working app.
+
+Working on ratings just to keep the energy going?
+
+Otherwise, things are going pretty well. Chugging along, seems reasonable at the moment. Styling with Ionic should be pretty good.

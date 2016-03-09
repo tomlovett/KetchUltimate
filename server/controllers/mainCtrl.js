@@ -10,8 +10,6 @@ var closeGame = function(req, res) {
 	return	
 }
 
-
-
 module.exports = {
 	updateGame  : updateGame,
 	closeGame   : closeGame,

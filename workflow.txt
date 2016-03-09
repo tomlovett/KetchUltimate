@@ -1,1 +1,5 @@
-workflow.txt
+set up databases - no idea where to go
+
+figure out CORS bullshit. fuck that shit.
+
+create dummy team, build it up
