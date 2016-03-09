@@ -11,13 +11,11 @@ var teamSchema = mongoose.Schema({
 
 module.exports = mongoose.model('team', teamSchema)
 
-/*
-misc = {
-	teamType : club/hat/college/tournament
-	averageAge : 
-	ageVariation :
-	location :
-	colorOne : #000000
-	colorTwo : #ffffff
-}
-*/
+
+// misc = {
+// 	teamType : club/hat/college/tournament
+// 	ageBracket : HS/college/club/masters/grandmasters
+// 	location :
+// 	colorOne : #000000
+// 	colorTwo : #ffffff
+// }

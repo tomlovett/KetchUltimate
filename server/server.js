@@ -5,8 +5,8 @@ var express    = require('express'),
     mongoose   = require('mongoose'),
     passport   = require('passport')
 
-var mainCtrl   = require('./controllers/mainCtrl.js'),
-    playerCtrl = require('./controllers/playerCtrl.js'),
+// var mainCtrl   = require('./controllers/mainCtrl.js'),
+var playerCtrl = require('./controllers/playerCtrl.js'),
     teamCtrl   = require('./controllers/teamCtrl.js'),
     ratingCtrl = require('./controllers/ratingCtrl.js')
 
@@ -21,12 +21,11 @@ app.use(express.static(__dirname + '/public'));
 
 // including passport; do in separate passport config module
 
-mongoose.connect('mongodb://localhost/players')
-mongoose.connect('mongodb://localhost/teams')
+mongoose.connect('mongodb://localhost/ketchDB')
 
 // API \\
-app.post('/api/updateGame', mainCtrl.updateGame)
-app.post('/api/closeGame',  mainCtrl.closeGame)
+// app.post('/api/updateGame', mainCtrl.updateGame)
+// app.post('/api/closeGame',  mainCtrl.closeGame)
 
 app.post('/api/createTeam', teamCtrl.createTeam)
 app.post('/api/loadTeam',  teamCtrl.loadTeam)

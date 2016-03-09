@@ -17,11 +17,13 @@ var saveToDB = function(req, res, team) {
 
 // API Functionality
 var createTeam = function(req, res) {
+	console.log('createTeam -> req.body: ', req.body)
 	var team = new Team({
 		name : req.body.name
 	})
 	team.save(function(err, savedTeam) {
-		res.send(savedTeam._id)
+		console.log('savedTeam: ', savedTeam)
+		res.send(savedTeam)
 	})
 }
 

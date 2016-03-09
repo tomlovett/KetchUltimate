@@ -1,7 +1,5 @@
 setting up persistent data
 
-fixing CORS issue
-
 database collections -> teams, players, player_ratings, rating_history
 ---
 logging people in, confirming permissions in requests to server without compromising security

@@ -26,7 +26,7 @@ var newPlayer = function(req, res) {
 		teams     : req.body.teams,
 	})
 	player.save(function(err, storedPlayer) {
-		res.send(storedPlayer._id)
+		res.send(storedPlayer)
 	})
 }
 

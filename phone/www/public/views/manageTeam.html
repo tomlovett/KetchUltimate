@@ -1,6 +1,18 @@
 <!-- View/Edit Roster - Add player -->
+<div class="row">
+	<div class="col">
+		<button class="button button-small" ng-click="changeMode('players')">Create Player</button>
+	</div>
+	<div class="col">
+		<button class="button button-small" ng-click="changeMode('editTeams')">Edit Teams</button>
+	</div>
+	<div class="col">
+		<button class="button button-small" ng-click="changeMode('createTeam')">Create Team</button>	
+	</div>
+</div>
 
-<div ng-show="createPlayer">
+<!-- Create Player -->
+<div ng-show="view['players']">
 
 	<label class="item item-input">
 		<input type="text" ng-model="player.firstName" placeholder="First Name*" required>
@@ -25,7 +37,52 @@
 	<p ng-show="errorMessage">{{errorMessage}}</p>
 
 </div>
+<!-- Edit Teams -->
+<div ng-show="view['editTeams']">
 
+	<div ng-hide="globalData.teams.length" class="row">
+		<p>No teams to edit!</p>
+	</div>
 
-<!-- show players, click to edit -->
-	<!-- both genders, displayed alphabetically -->
+	<div ng-show="globalData.teams.length" ng-hide="editing">
+		<h4>Edit Teams</h4>
+		<ul class="list">
+			<li class="item" ng-repeat="teamObj in globalData.teams" ng-click="edit(teamObj)">{{teamObj.name}}</li>
+		</ul>
+	</div>
+
+	<div ng-show="editing">
+	<!-- directly editing team -->
+		<div class="list">
+			<div class="item item-button-right">
+				{{$scope.editing.name}}
+				<button class="button button-positive button-small">edit</button>
+			</div>
+		</div>
+
+		<label class="item item-input">
+			<input type="text" ng-model="player.handle" placeholder="Nickname">
+		</label>
+
+		<label class="item item-input">
+			<input type="text" ng-model="player.handle" placeholder="Nickname">
+		</label>
+
+		<h3>Team Roster:</h3>
+	</div>
+
+<!-- phase two: show roster -->
+	<!-- edit roster, edit players -->
+
+</div>
+<!-- Create Team -->
+<div ng-show="view['createTeam']">
+	<label class="item item-input">
+		<input type="text" ng-model="newTeam.name" placeholder="Team Name*" required>
+	</label>
+
+	<button class="button button-balanced" ng-click="createTeam()">Create Team</button>
+
+	<h4>{{createdMessage}}</h4>
+
+</div>
