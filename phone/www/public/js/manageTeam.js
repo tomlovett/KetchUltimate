@@ -1,5 +1,17 @@
 angular.module('Ketch').controller('manageTeam', ['$scope', '$http', 'globalData', function($scope, $http, globalData) {
 
+	if (globalData.teams.length < 1) {
+		$http.post('http://localhost:3000/api/loadTeam', {teamID : '56e1e9bf1e32999b39b025be'})
+			.then(function(returnData) {
+				globalData.teams.push(returnData.data)
+				if (returnData.data.roster.length > 0) {
+					returnData.data.roster.forEach(function(playerObj) {
+						globalData.friends[playerObj._id] = playerObj
+					})
+				}
+			})
+	}
+
 	$scope.globalData = globalData
 	$scope.errorMessage = ''
 
@@ -30,7 +42,8 @@ angular.module('Ketch').controller('manageTeam', ['$scope', '$http', 'globalData
 			.then(function(returnData) {
 				console.log(returnData)
 				var player = returnData.data
-				globalData.users[player._id] = player	
+				globalData.friends[player._id] = player
+				console.log('gData.friends: ', globalData.friends)
 			})
 		// print/display confirmation, or created player
 		$scope.player = {}
@@ -59,8 +72,14 @@ angular.module('Ketch').controller('manageTeam', ['$scope', '$http', 'globalData
 				$scope.createdMessage = 'Team created!'
  			})
 	}
+	$scope.editFocus = function(player) {
+		console.log('Fuck this fucking fuck: ', player.name)
+	}
+	$scope.addToRoster = function(player) {
+		console.log('Fuck this fucking fuck: ', player.name)
+	}
 
-	// addToRoster
+
 
 	// removeFromRoster
 

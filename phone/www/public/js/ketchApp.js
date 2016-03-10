@@ -1,4 +1,5 @@
 angular.module('Ketch', [
-	'ngRoute',
+	'ionic',
+	'ui.router',
 	'ngResource'
 ])

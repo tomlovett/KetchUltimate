@@ -35,19 +35,17 @@ email-verified players can only be edited by logging in as that player
 
 stats last
 ---
-Help Notes:
-  '/' and '/welcome' not working
+gotta get shit working. aim for the basics? not thinking too much about what ionic can do
 
-  logging in
-
+what the fuck is SCSS?
 ---
 
 AJAX login -> server
 server -> user, user_id
 
 ---
-demo full functionality, then how quickly it can be built-up
-Burning Macaroons, CANNED MEAT, Hammers in Paris 
+##demo full functionality, then how quickly it can be built-up
+##Burning Macaroons, CANNED MEAT, Hammers in Paris 
 
 actually running this through PhoneGap
 

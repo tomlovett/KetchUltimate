@@ -15,24 +15,21 @@
 
 <!-- Create Player -->
 <div ng-show="view['players']">
-
+	
 	<label class="item item-input">
 		<input type="text" ng-model="player.firstName" placeholder="First Name*" required>
 	</label>
-
 	<label class="item item-input">
 		<input type="text" ng-model="player.lastName"  placeholder="Last Name*" required>
 	</label>
-
 	<label class="item item-input">
 		<input type="text" ng-model="player.handle" placeholder="Nickname">
 	</label>
-
 	<label class="item item-input">
 		<input type="text" ng-model="player.email" placeholder="Email">
 	</label>
 	<p>(Email is not immediately required, but it will make it much easier to link up your players in the future!)</p>
-
+	
 	<!-- attach to these teams: on/off -->
 	<!-- if no teams: We recommend creating teams first! -->
 
@@ -65,7 +62,10 @@
 			</li>
 		</ul>
 
-		<h3>Team Roster:</h3>
+		<div class="row">
+			<div class="col">ROSTER<br><span ng-repeat="player in editing.roster" ng-click="editFocus(player)">{{player.handle}}<br></span></div>
+			<div class="col">FRIENDS<br><span ng-repeat="player in globalData.friends" ng-click="addToRoster(player)">{{player.handle}}<br></span></div>
+		</div>
 		<!-- two columns: players on roster, available players -->
 	</div>
 

@@ -1,14 +1,9 @@
-body {
-	text-align: center;
-	background-color: black;
-	color: white;
+/*.background, .background .pane, .background .item, .background .item-complex .item-content {
+    background-color: black;
+    color: white;
 }
-
+*/
 .scoreboard {
 	font-size: 5em;
 	font-weight: bold;
-}
-
-h1, h2, h3, h4, h5, h6 {
-	color: white;
 }
