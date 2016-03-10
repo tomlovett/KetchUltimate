@@ -6,6 +6,7 @@ var playerSchema = mongoose.Schema({
 	handle      : String,
 	gender      : String,
 	email       : { type: String, default: '' },
+	password    : String,
 	teams       : { type: Array,  default: [] }, // array of team id's
 	gameHistory : { type: Array,  default: [] },
 	pointHistory: { type: Array,  default: [] },

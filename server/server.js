@@ -4,6 +4,7 @@ var express    = require('express'),
     logger     = require('morgan'),
     mongoose   = require('mongoose'),
     passport   = require('passport')
+var passportConfig = require('./config/passportConfig.js')
 
 // var mainCtrl   = require('./controllers/mainCtrl.js'),
 var playerCtrl = require('./controllers/playerCtrl.js'),
@@ -12,6 +13,7 @@ var playerCtrl = require('./controllers/playerCtrl.js'),
 
 // Create Express App Object \\
 var app = express();
+mongoose.connect('mongodb://localhost/ketchDB')
 
 var session = require('express-session')
 app.sessionMiddleware = session({
@@ -21,32 +23,32 @@ app.sessionMiddleware = session({
 })
 app.use(app.sessionMiddleware)
 
+// Passport hooks into our app
+app.use(passport.initialize())
+app.use(passport.session())
+
 // Application Configuration \\
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 
-// including passport; do in separate passport config module
-
-mongoose.connect('mongodb://localhost/ketchDB')
-
 // API \\
 // app.post('/api/updateGame', mainCtrl.updateGame)
 // app.post('/api/closeGame',  mainCtrl.closeGame)
 
-app.post('/api/createTeam', teamCtrl.createTeam)
-app.post('/api/loadTeam',  teamCtrl.loadTeam)
-app.post('/api/addToRoster', teamCtrl.addToRoster)
+app.post('/api/createTeam',       teamCtrl.createTeam)
+app.post('/api/loadTeam',         teamCtrl.loadTeam)
+app.post('/api/addToRoster',      teamCtrl.addToRoster)
 app.post('/api/removeFromRoster', teamCtrl.removeFromRoster)
-app.post('/api/makeCaptain', teamCtrl.makeCaptain)
+app.post('/api/makeCaptain',      teamCtrl.makeCaptain)
 
 app.post('/api/newPlayer',  playerCtrl.newPlayer)
 app.post('/api/editPlayer', playerCtrl.editPlayer)
 app.post('/api/loadPlayer', playerCtrl.loadPlayer)
 
-app.post('/api/recordRatings', ratingCtrl.recordRatings)
-app.post('/api/recordAnswer',  ratingCtrl.recordAnswer)
+// app.post('/api/recordRating', ratingCtrl.recordRating)
+// app.post('/api/recordAnswer', ratingCtrl.recordAnswer)
 
 // Creating Server and Listening for Connections \\
 var port = 3000

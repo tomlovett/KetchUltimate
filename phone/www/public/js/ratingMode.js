@@ -1,17 +1,46 @@
-angular.module('Ketch').controller('ratingMode', ['$scope', '$http', function($scope, $http) {
+angular.module('Ketch').controller('ratingMode', ['$scope', '$http', 'globalData', function($scope, $http, globalData) {
 
-	console.log('ratingMode controller')
+	var format = []
+	// self              - 2 height, bday, etc.
+	// self-style        - 2
+	// self-abilities    - 2
+	// subject1-style     - 2 
+	// subject1-abilities - 2
+	// subject2-style     - 2 
+	// subject2-abilities - 2
+	// dessert
+		// ideally
 
-	var genQuestions = function() {
-		'if I feel like doing this locally'
+	$scope.question = {
+		num   : 33,
+		prompt: 'How dope is your dope?',
+		2     : 'Not very dope.',
+		4     : 'Of average dopeness.',
+		6     : 'The dopest dope in the room.'
 	}
 
-	var loadNext = function() {
-		'get the next question'
+	var loadQuestions = function() {
+		// findTwoTeammates()
+		http.post('http://localhost:3000/api/recordRating')
+		// ping database for unanswered question
+			// post user_id
+		'yippee'
 	}
 
 	$scope.record = function(score) {
-		'store'
+		var answerObj = {
+			questionNum : $scope.question[num],
+			rating      : score,
+			judgeID     : globalData.user._id,
+			subjectID   : subjectID  //garbage, how do I get this?
+		}
+		$http.post('http://localhost:3000/api/recordRating', answerObj)
+			.then(function(ratingReturn) {
+				$http.post('http://localhost:3000/api/recordAnswer', answerObj)
+					.then(function(answerReturn) {
+						'yippee'
+					})
+			})
 		loadNext()
 	}
 

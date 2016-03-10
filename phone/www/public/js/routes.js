@@ -3,8 +3,8 @@ angular.module('Ketch')
 // can take out $rP dependency
 		$routeProvider
 		
-			.when('/', {
-				templateURL : '/public/views/index.html',
+			.when('/login', {
+				templateURL : '/public/views/login.html',
 				controller  : 'mainCtrl'
 			})		
 			.when('/game', {
@@ -24,7 +24,7 @@ angular.module('Ketch')
 				controller  : 'playerHistory'
 			})
 			.when('/scoreSummary/:game' , {
-				templateUrl : '/public/views/scoreSummary',
+				templateUrl : '/public/views/scoreSummary.html',
 				controller  : 'scoreSummary'
 			})
 			.when('/teamStats/:team/:game' , {
@@ -32,11 +32,11 @@ angular.module('Ketch')
 				controller  : 'teamStats'
 			})
 			.when('/playerStats/:player/:game' , {
-				templateUrl : '/public/views/playerStats',
+				templateUrl : '/public/views/playerStats.html',
 				controller  : 'playerStats'
 			})
 			.when('/ratingMode' , {
-				templateUrl : '/public/views/ratingMode',
+				templateUrl : '/public/views/ratingMode.html',
 				controller  : 'ratingMode'
 			})
 

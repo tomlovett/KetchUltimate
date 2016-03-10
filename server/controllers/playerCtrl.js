@@ -1,4 +1,6 @@
 var Player = require('../models/player.js')
+var Ratings = require('../models/ratings.js')
+var Answers = require('../models/answers.js')
 
 // Abstractions
 var loadFromDB = function(req, res, func) {
@@ -25,7 +27,17 @@ var newPlayer = function(req, res) {
 		email     : req.body.email || null,
 	})
 	player.save(function(err, storedPlayer) {
-		res.send(storedPlayer)
+		var ratings = new Ratings({
+			playerID : storedPlayer._id
+		})
+		ratings.save(function(err, storedRatings) {
+			var answers = new Answers({
+				playerID : storedPlayer._id
+			})
+			answers.save(function(err, storedAnswers) {
+				res.send(storedPlayer)				
+			})
+		})
 	})
 }
 

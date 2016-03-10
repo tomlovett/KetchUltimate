@@ -7,9 +7,9 @@ angular.module('Ketch').controller('manageTeam', ['$scope', '$http', 'globalData
 
 	$scope.changeMode = function(mode) {
 		$scope.view = {
-			players    : false,
-			editTeams   : false,
-			createTeam : false
+			players   : false,
+			editTeams : false,
+			createTeam: false
 		}
 		$scope.view[mode] = true
 		console.log('$scope.editing: ', $scope.editing)

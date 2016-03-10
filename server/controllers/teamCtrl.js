@@ -35,6 +35,7 @@ var loadTeam = function(req, res) {
 
 var addToRoster = function(req, res) {
 	loadFromDB(req, res, function(team){
+		// doesn't add teams to that player
 		team.roster.push(req.body.playerID)
 		saveToDB(req, res, team)
 	})	

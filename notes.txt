@@ -1,28 +1,10 @@
-setting up persistent data; passport -> req.user?
+AJAX login -> server
+server -> user, user_id
 
-database collections -> teams, players, playerRatings, rating_history
+---
 
 actually running this through PhoneGap
----
+
 logging people in, confirming permissions in requests to server without compromising security
 
-abstracting/isolating express API routing
-
-passport through AJAX
-
 navbar controller
-
-LATER, BRO:
-alternating colors:
-  colors = [primary, secondary]
-  if (this.game !== above.game) { 
-     this.color = (this.color + 1) % 2
-  }
-
-pushing a new rating:
-	ratings.push(newRating)
-	rating = ((ratings.length * rating) + newRating) / (ratings.length+1)
-	// less computation
-
-
-I want to have a workable team to mess with so I can visualize functionality, spot errors; generally, see a working app.
