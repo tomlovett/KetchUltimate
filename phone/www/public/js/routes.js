@@ -3,10 +3,14 @@ angular.module('Ketch')
 // can take out $rP dependency
 		$routeProvider
 		
-			.when('/login', {
-				templateURL : '/public/views/login.html',
-				controller  : 'mainCtrl'
-			})		
+			.when('/home', {
+				templateURL : '../views/welcome.html',
+				controller  : 'mainCtrl'	
+			})
+			// .when('/welcome', {
+			// 	templateURL : '/public/views/welcome.html',
+			// 	controller  : 'mainCtrl'
+			// })		
 			.when('/game', {
 				templateUrl : '/public/views/game.html',
 				controller  : 'gameController'

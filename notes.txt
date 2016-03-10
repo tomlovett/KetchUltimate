@@ -1,7 +1,53 @@
+landing page: login via facebook or email
+if no login:
+	create player with email
+	if email in database:
+		send email to verify player
+		#want (skip ahead to temp game)
+player has connections to teams and other users
+	can pull all at log-in, attach to globalData
+
+manage Team:
+	display email-less players
+breaking up manage team into smaller pages/views
+
+create Self
+	"I think I'm already in Ketch's database"
+		emailInDB ? verificationEmail() : create
+	create
+	in a hurry, bro
+
+create Teammates
+	create temp player
+	search by email
+
+mergePlayers function
+	verified, unverified player
+	combine stats, history
+	merge teams
+	replace temp player on roster with verified
+
+log-in/create:
+  load friendList: teammates from every team
+  ping database for email
+
+email-verified players can only be edited by logging in as that player
+
+stats last
+---
+Help Notes:
+  '/' and '/welcome' not working
+
+  logging in
+
+---
+
 AJAX login -> server
 server -> user, user_id
 
 ---
+demo full functionality, then how quickly it can be built-up
+Burning Macaroons, CANNED MEAT, Hammers in Paris 
 
 actually running this through PhoneGap
 

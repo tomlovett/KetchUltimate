@@ -10,8 +10,8 @@ angular.module('Ketch').controller('gameController', ['$scope', '$http', 'gameUt
 	$scope.metric   = ''
 
 	$scope.game = new gameUtility.Game
-	console.log($scope.game)
-	console.log(gameUtility)
+	console.log('$scope.game: ', $scope.game)
+	console.log('gameUtility: ', gameUtility)
 
 	$scope.score = function(result) {
 		$scope.game.recordPoint(result)

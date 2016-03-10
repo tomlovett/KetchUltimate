@@ -3,8 +3,6 @@ angular.module('Ketch').controller('manageTeam', ['$scope', '$http', 'globalData
 	$scope.globalData = globalData
 	$scope.errorMessage = ''
 
-	console.log(globalData)
-
 	$scope.changeMode = function(mode) {
 		$scope.view = {
 			players   : false,
@@ -12,7 +10,6 @@ angular.module('Ketch').controller('manageTeam', ['$scope', '$http', 'globalData
 			createTeam: false
 		}
 		$scope.view[mode] = true
-		console.log('$scope.editing: ', $scope.editing)
 	}
 
 	var checkErrors = function() {
@@ -35,6 +32,7 @@ angular.module('Ketch').controller('manageTeam', ['$scope', '$http', 'globalData
 				var player = returnData.data
 				globalData.users[player._id] = player	
 			})
+		// print/display confirmation, or created player
 		$scope.player = {}
 		// WANT: check email address, names even
 	}
