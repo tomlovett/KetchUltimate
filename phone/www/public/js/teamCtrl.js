@@ -10,13 +10,9 @@ angular.module('Ketch').controller('teamController', ['$scope', '$http', 'global
 			var team = returnData.data
 			if (globalData.teams.length == 0 && team !== '') { 
 				globalData.teams.push(team) 
-				if (returnData.data.roster.length > 0) {
-					returnData.data.roster.forEach(function(playerObj) {
-						console.log('loading player from FC roster to gData.friends')
-						globalData.friends.push(playerObj)
-					})
-				console.log('post pre-load gData.friends: ', globalData.friends)
-				}
+				returnData.data.roster.forEach(function(playerObj) {
+					globalData.friends.push(playerObj)
+				})
 			}
 		})
 	}
@@ -24,7 +20,8 @@ angular.module('Ketch').controller('teamController', ['$scope', '$http', 'global
 	$scope.globalData = globalData
 	$scope.errorMessage = ''
 	$scope.player = $scope.player || {}
-	$scope.player.teams = []
+	$scope.player.teams = [] // careful. be wary of toggle box.
+	// ideally, look for a way to tie toggle boxes to a true/false value
 
 	var checkErrors = function() {
 		$scope.errorMessage = ''
@@ -52,7 +49,7 @@ angular.module('Ketch').controller('teamController', ['$scope', '$http', 'global
 					$scope.player.teams.forEach(function(team) {
 						$scope.addToRoster(player, team)
 					})
-				}
+				} // want to take out "if", but wary of toggle issues
 				$scope.player = {
 					firstName: '',
 					lastName : '',
@@ -71,7 +68,7 @@ angular.module('Ketch').controller('teamController', ['$scope', '$http', 'global
 		if (checkErrors())   { return }
 		$http.post(server + '/api/editPlayer', $scope.player)
 			.then(function(returnData) {
-				player = returnData.data
+				player = returnData.data // modify the thing holding it/?
 				console.log(returnData)
 			})
 	}

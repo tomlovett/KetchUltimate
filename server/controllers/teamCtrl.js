@@ -21,9 +21,7 @@ var createTeam = function(req, res) {
 	var team = new Team({
 		name : req.body.name
 	})
-	team.save(function(err, savedTeam) {
-		res.send(savedTeam)
-	})
+	saveToDB(req, res, team)
 }
 
 var loadTeam = function(req, res) {
@@ -56,9 +54,9 @@ var makeCaptain = function(req, res) {
 }
 
 module.exports = {
-	createTeam       : createTeam,
-	loadTeam         : loadTeam,
-	addToRoster      : addToRoster,
-	removeFromRoster : removeFromRoster,
-	makeCaptain      : makeCaptain
+	createTeam      : createTeam,
+	loadTeam        : loadTeam,
+	addToRoster     : addToRoster,
+	removeFromRoster: removeFromRoster, // cutting down the name, looks weird
+	makeCaptain     : makeCaptain
 }

@@ -13,12 +13,13 @@ var loadFromDB = function(req, res, func) {
 var saveToDB = function(req, res, player) {
 	player.save(function(err, savedPlayer) {
 		if (err)  res.send(err)
-		else      res.send(200)
+		else      res.send(savedPlayer)
 	})
 }
 
 // API functionality
 var newPlayer = function(req, res) {
+	// check DB for email
 	var player = new Player({
 		firstName : req.body.firstName,
 		lastName  : req.body.lastName,
@@ -45,7 +46,7 @@ var editPlayer = function(req, res) {
 	loadFromDB(req, res, function(player) {
 		player[firstName] = req.body.firstName,
 		player[lastName]  = req.body.lastName,
-		player[handle]    = req.body.handle,
+		player[handle]    = req.body.handle || req.body.firstName,
 		player[gender]    = req.body.gender
 		player[email]     = req.body.email || null,
 		saveToDB(req, res, player)
@@ -59,7 +60,7 @@ var loadPlayer = function(req, res) {
 }
 
 module.exports = {
-	newPlayer  : newPlayer,
-	editPlayer : editPlayer,
-	loadPlayer : loadPlayer
+	newPlayer : newPlayer,
+	editPlayer: editPlayer,
+	loadPlayer: loadPlayer
 }

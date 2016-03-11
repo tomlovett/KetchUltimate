@@ -1,1 +1,32 @@
-create dummy team, build it up
+// Team
+connecting the toggle box to a boolean - help
+refactor code with fresh eyes
+// Welcome
+setting up passport
+// Game
+split up game.html in smaller files
+start new game
+// navbar
+
+---
+##Work
+rename files?
+//Welcome
+if email in database: email to verify player
+//Team
+search by email function
+alert icon for email-less players
+// Back-End 
+mergePlayers function
+	verified, unverified player
+	combine stats, history
+	merge teams
+	replace temp player on roster with verified
+---
+##demo full functionality, then how quickly it can be built-up
+##Burning Macaroons, CANNED MEAT, Evil Superheroes, Thumbers in Thailand
+
+logging people in, confirming permissions in requests to server without compromising security
+email- players can only be edited by logging in as that player
+
+navbar controller
