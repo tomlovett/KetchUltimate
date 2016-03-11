@@ -21,6 +21,8 @@ angular.module('Ketch').controller('welcomeController', ['$scope', '$http', 'glo
 		$http.post(server + '/api/login', $scope.signin)
 			.then(function(returnData) {
 				console.log('login returnData.data: ', returnData.data)
+				// returns full Player object
+				// assign to globalData.user
 			})
 		'if email not in database, error message -> email not in DB, '
 		'else if password is incorrect, error message -> try again'

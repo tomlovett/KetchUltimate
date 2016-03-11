@@ -39,7 +39,6 @@ var LocalStrategy = require('passport-local').Strategy;
 app.use(passport.initialize())
 app.use(passport.session())
 
-
 passport.serializeUser(function(user, done) {
     done(null, user.id)
 })
@@ -49,24 +48,16 @@ passport.deserializeUser(function(id, done) {
     })
 })
 
-passport.use(new LocalStrategy(
-    function(username, password, done) {
-        Player.findOne({ email: username }, function (err, user) {
-            if (err) { return done(err); }
-            if (!user) {
-                return done(null, false, { message: 'Incorrect username.' });
-            }
-            bcrypt.compare(password, user.password, function(error, response){
-                if (response === true){
-                    return done(null,user)
-                }
-                else {
-                    return done(null, false)
-                }
-            })
-        });
-    }
-));
+passport.use(new LocalStrategy(function(playerEmail, password, done) {
+    Player.findOne({ email: playerEmail }, function(err, user) {
+        if (err)   { return done(err)                                      }
+        if (!user) { return done(null, false, { message: 'no such user' }) }
+        bcrypt.compare(password, user.password, function(error, response){
+            if (response === true) { return done(null, user)  }
+            else                   { return done(null, false) }
+        })
+    })
+}))
 var initPlayerUser = function(req, res){
     console.log('initPlayerUser')
     bcrypt.genSalt(10, function(error, salt){
@@ -77,10 +68,10 @@ var initPlayerUser = function(req, res){
             })
             player.save(function(saveErr, savedPlayer){
                 if ( saveErr ) { res.send({ err: saveErr }) }
-                else { 
-                    req.logIn(savedPlayer, function(loginErr){
-                        if ( loginErr ) { res.send({ err:loginErr }) }
-                        else { res.send(savedPlayer) }
+                else {
+                    req.logIn(savedPlayer, function(loginErr) {
+                        if ( loginErr ) { res.send({ err: loginErr }) }
+                        else            { res.send(savedPlayer)       }
                     })
                 }
             })
@@ -95,9 +86,9 @@ app.post('/api/login', function(req, res, next){
         if (!user) { return res.send({error : 'something went wrong :('}); }
         req.logIn(user, function(err) {
             if (err) { return next(err); }
-            return res.send({success:'success'});
+            return res.send(user);
         });
-    })(req, res, next);
+    })(req, res, next)
 })
 
 // Authentication \\
@@ -107,7 +98,6 @@ app.isAuth = function(req, res, next){
 }
 
 app.post('/api/initPlayerUser', initPlayerUser)
-// app.post('/api/login',          login)
 
 // API routes \\
 // app.post('/api/updateGame', mainCtrl.updateGame)

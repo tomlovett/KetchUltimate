@@ -1,7 +1,13 @@
-// Team
-refactor code with fresh eyes
+
 // Welcome
-setting up passport
+passport now returns Player
+	assigning to Global, going from there
+	server.js now ugly though
+assign globalData via signed-in user
+	globalData.setUser(player)
+	team, friends, rosters
+// Team
+splitting up via actual usage
 // Game
 split up game.html in smaller files
 start new game
