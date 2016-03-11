@@ -1,5 +1,7 @@
 angular.module('Ketch').controller('ratingController', ['$scope', '$http', 'globalData', function($scope, $http, globalData) {
 
+	var server = 'http://localhost:3000'
+
 	var format = []
 	// self              - 2 height, bday, etc.
 	// self-style        - 2

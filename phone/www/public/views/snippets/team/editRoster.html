@@ -1,18 +1,17 @@
-<div ng-show="view['editTeams']">
-
+<div>
 	<div ng-hide="globalData.teams" class="row">
 		<p>No teams to edit!</p>
 	</div>
 
-	<div ng-show="globalData.teams" ng-hide="editing">
-		<h4>Edit Teams</h4>
+	<div>
+		<h4>Edit Rosters</h4>
 		<ul class="list">
-			<li class="item" ng-repeat="team in globalData.teams" ng-click="edit(team)">{{team.name}}</li>
+			<li class="item align-left" ng-hide="editing" ng-repeat="team in globalData.teams" ng-click="edit(team)">{{team.name}}</li>
 		</ul>
 	</div>
 
-	<div ng-show="editing">
-		<ul class="list">
+	<div>
+		<ul class="list" ng-show="editing">
 			<li class="item item-button-right">
 				{{editing.name}}
 				<button class="button button-positive" ng-click="edit(editing)">Done</button>
@@ -20,10 +19,12 @@
 		</ul>
 
 		<div class="row">
-			<div class="col">ROSTER<br><span ng-repeat="player in editing.roster" ng-click="editFocus(player)">{{player.handle}}<br></span></div>
-			<div class="col">FRIENDS<br><span ng-repeat="player in globalData.friends" ng-click="addToRoster(player)">{{player.handle}}<br></span></div>
+			<div class="col">ROSTER<br>
+				<span ng-repeat="player in editing.roster" ng-click="editFocus(player)">{{player.handle}}<br></span>
+			</div>
+			<div class="col">FRIENDS<br>
+				<span ng-repeat="player in globalData.friends" ng-click="addToRoster(player, editing)">{{player.firstName}} {{player.lastName}}<br></span>
+			</div>
 		</div>
-		<!-- two columns: players on roster, available players -->
 	</div>
-
 </div>

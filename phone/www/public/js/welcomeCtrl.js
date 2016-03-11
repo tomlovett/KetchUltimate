@@ -1,20 +1,20 @@
 angular.module('Ketch').controller('welcomeController', ['$scope', '$http', 'globalData', function($scope, $http, globalData) {
 
 	console.log('mainCtrl')
-	var server = ''
-	if (globalData.teams.length < 1) {
-		$http.post('http://localhost:3000/api/loadTeam', {teamID : '56e1e9bf1e32999b39b025be'})
-			.then(function(returnData) {
-				var team = returnData.data
-				globalData.teams[team._id] = team
-				if (returnData.data.roster.length > 0) {
-					returnData.data.roster.forEach(function(playerObj) {
-						console.log(playerObj)
-						globalData.friends[playerObj._id] = playerObj
-					})
-				}
-			})
-	}
+	var server = 'http://localhost:3000'
+	// if (globalData.teams.length < 1) {
+	// 	$http.post(server + '/api/loadTeam', {teamID : '56e1e9bf1e32999b39b025be'})
+	// 		.then(function(returnData) {
+	// 			var team = returnData.data
+	// 			globalData.teams[team._id] = team
+	// 			if (returnData.data.roster.length > 0) {
+	// 				returnData.data.roster.forEach(function(playerObj) {
+	// 					console.log(playerObj)
+	// 					globalData.friends[playerObj._id] = playerObj
+	// 				})
+	// 			}
+	// 		})
+	// }
 
 	var loadPlayer = function(player) {
 		globalData.user = player // from DB

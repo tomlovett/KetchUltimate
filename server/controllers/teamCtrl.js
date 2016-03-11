@@ -11,7 +11,7 @@ var loadFromDB = function(req, res, func) {
 var saveToDB = function(req, res, team) {
 	team.save(function(err, savedTeam) {
 		if (err)  	res.send(err)
-		else 		res.send(200)
+		else 		res.send(savedTeam)
 	})
 }
 
@@ -22,7 +22,6 @@ var createTeam = function(req, res) {
 		name : req.body.name
 	})
 	team.save(function(err, savedTeam) {
-		console.log('savedTeam: ', savedTeam)
 		res.send(savedTeam)
 	})
 }
@@ -36,7 +35,7 @@ var loadTeam = function(req, res) {
 var addToRoster = function(req, res) {
 	loadFromDB(req, res, function(team){
 		// doesn't add teams to that player
-		team.roster.push(req.body.playerID)
+		team.roster.push(req.body.player)
 		saveToDB(req, res, team)
 	})	
 }

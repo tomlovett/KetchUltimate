@@ -3,7 +3,7 @@ angular.module('Ketch').factory('globalData', function() {
 	user     = {}
 	mainTeam = null
 	teams    = [] // pull from user.teams
-	friends  = {}
+	friends  = []
 
 	// preloaded team
 

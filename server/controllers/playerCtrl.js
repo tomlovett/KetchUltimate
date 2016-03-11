@@ -22,7 +22,7 @@ var newPlayer = function(req, res) {
 	var player = new Player({
 		firstName : req.body.firstName,
 		lastName  : req.body.lastName,
-		handle    : req.body.handle,
+		handle    : req.body.handle || req.body.firstName,
 		gender    : req.body.gender,
 		email     : req.body.email || null,
 	})

@@ -9,13 +9,6 @@ player has connections to teams and other users
 
 manage Team:
 	display email-less players
-breaking up manage team into smaller pages/views
-
-create Self
-	"I think I'm already in Ketch's database"
-		emailInDB ? verificationEmail() : create
-	create
-	in a hurry, bro
 
 create Teammates
 	create temp player
@@ -34,11 +27,6 @@ log-in/create:
 email-verified players can only be edited by logging in as that player
 
 stats last
-
----
-
-AJAX login -> server
-server -> user, user_id
 
 ---
 ##demo full functionality, then how quickly it can be built-up

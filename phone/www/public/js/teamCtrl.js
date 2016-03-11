@@ -1,33 +1,30 @@
 angular.module('Ketch').controller('teamController', ['$scope', '$http', 'globalData', function($scope, $http, globalData) {
 
-	console.log(globalData)
+	var server = 'http://localhost:3000'
 
-	if (globalData.teams.length < 1) {
-		console.log('running team loading')
-		$http.post('http://localhost:3000/api/loadTeam', {teamID : '56e1e9bf1e32999b39b025be'})
-			.then(function(returnData) {
-				var team = returnData.data
-				globalData.teams.push(team)
-				console.log('globalData.teams: ', globalData.teams)
+	globalData.friends = globalData.friends || []
+
+	if (globalData.teams.length == 0) {
+	$http.post(server + '/api/loadTeam', {teamID : '56e23a1d9de24cc03efc5555'})
+		.then(function(returnData) {
+			var team = returnData.data
+			if (globalData.teams.length == 0 && team !== '') { 
+				globalData.teams.push(team) 
 				if (returnData.data.roster.length > 0) {
 					returnData.data.roster.forEach(function(playerObj) {
-						globalData.friends[playerObj._id] = playerObj
+						console.log('loading player from FC roster to gData.friends')
+						globalData.friends.push(playerObj)
 					})
+				console.log('post pre-load gData.friends: ', globalData.friends)
 				}
-			})
+			}
+		})
 	}
 
 	$scope.globalData = globalData
 	$scope.errorMessage = ''
-
-	$scope.changeMode = function(mode) {
-		$scope.view = {
-			players   : false,
-			editTeams : false,
-			createTeam: false
-		}
-		$scope.view[mode] = true
-	}
+	$scope.player = $scope.player || {}
+	$scope.player.teams = []
 
 	var checkErrors = function() {
 		$scope.errorMessage = ''
@@ -40,68 +37,67 @@ angular.module('Ketch').controller('teamController', ['$scope', '$http', 'global
 		return $scope.errorMessage
 	}
 
+	$scope.select = function(team) {
+		$scope.player.teams.push(team)
+	}
+
 	$scope.submitPlayer = function(gender) {
 		if ( checkErrors() )   { return }
 		$scope.player.gender = gender
-		console.log('$scope.addTo: ', $scope.addTo)
-		$http.post('http://localhost:3000/api/newPlayer', $scope.player)
+		$http.post(server + '/api/newPlayer', $scope.player)
 			.then(function(returnData) {
-				console.log(returnData)
 				var player = returnData.data
-				globalData.friends[player._id] = player
-				console.log('gData.friends: ', globalData.friends)
+				globalData.friends.push(player)
+				if ($scope.player.teams) {
+					$scope.player.teams.forEach(function(team) {
+						$scope.addToRoster(player, team)
+					})
+				}
+				$scope.player = {
+					firstName: '',
+					lastName : '',
+					handle   : '',
+					email    : ''
+				}
+				// $scope.player.teams = [team]
+				// workaround for $s.p.teams resetting but toggle icon remaining checked
 			})
 
 		// print/display confirmation, or created player
-		$scope.player = {}
-		$scope.addTo  = {}
 		// WANT: check email address, names even
 	}
 
 	$scope.editPlayer = function(player) {
 		if (checkErrors())   { return }
-		$http.post(host + '/api/editPlayer', $scope.player)
+		$http.post(server + '/api/editPlayer', $scope.player)
 			.then(function(returnData) {
+				player = returnData.data
 				console.log(returnData)
 			})
 	}
 
-	$scope.edit = function(teamObj) {
-		if ($scope.editing == teamObj) $scope.editing = null
-		else                           $scope.editing = teamObj
-		console.log('team roster: ', teamObj.roster)
+	$scope.edit = function(team) {
+		if ($scope.editing == team) $scope.editing = null
+		else                        $scope.editing = team
 	} 
 
 	$scope.createTeam = function() {
 		// needs error handling
-		$http.post('http://localhost:3000/api/createTeam', $scope.newTeam)
+		$http.post(server + '/api/createTeam', $scope.newTeam)
 			.then(function(returnData) {
-				globalData.teams[returnData.data._id] = returnData.data
+				globalData.teams.push(returnData.data)
 				$scope.newTeam = {}
 				$scope.createdMessage = 'Team created!'
  			})
 	}
 
-	$scope.editFocus = function(player) {
-		console.log('Fuck this fucking fuck: ', player.name)
-	}
 	$scope.addToRoster = function(player, team) {
-		var idObj = { teamID: team._id, playerID: player._id }
-		$http.post('http://localhost:3000/api/addToRoster', idObj)
+		if (!team)  { return }
+		var idObj = { teamID: team._id, player: player }
+		$http.post(server + '/api/addToRoster', idObj)
 			.then(function(returnData) {
-				console.log('returnData: ', returnData)
-				$http.post('http://localhost:3000/api/loadTeam', idObj )
-					.then(function(returnedTeam) {
-						team = returnedTeam
-					})				// add this fuck to local roster
+				team.roster.push(player)
 			})
 	}
 
-
-
-	// removeFromRoster
-
-	// makeCaptain
-		// authenticate captainhood
-	
 }])

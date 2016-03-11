@@ -3,6 +3,7 @@ angular.module('Ketch').controller('gameController', ['$scope', '$http', 'gameUt
 	// Team.importTeam
 	// nameKey[player._id] = player.handle
 		// processing function
+	var server = 'http://localhost:3000'
 
 	$scope.subMode = true
 
