@@ -1,4 +1,4 @@
-angular.module('Ketch').controller('welcomeController', ['$scope', '$http', 'globalData', function($scope, $http, globalData) {
+angular.module('Ketch').controller('welcomeController', ['$scope', '$https', 'globalData', function($scope, $https, globalData) {
 
 	console.log('mainCtrl')
 	var server = 'http://localhost:3000'
@@ -16,33 +16,41 @@ angular.module('Ketch').controller('welcomeController', ['$scope', '$http', 'glo
 	// 		})
 	// }
 
-	var loadPlayer = function(player) {
-		globalData.user = player // from DB
-
-	}
-
-	var loadFriends = function(player) {
-
-	}
-
 	$scope.login = function() {
 		'if email not in database, error message -> email not in DB, '
 		'else if password is incorrect, error message -> try again'
 		'set player as globalData.user, load teams & friends'
 	}
 
-	$scope.register = function() {
+	var verifyInput = function() {
+		$scope.errorMessage = ''
+		if (!email) { $scope.errorMessage += 'Error: No email address\n'}
+		// better regEx? -> \b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b.
+		if (!newUser.password || !newUser.password2) {
+			$scope.errorMessage += 'Error: Missing password'
+		} else if (newUser.password !== newUser.password2) {
+			$scope.errorMessage += 'Error: Passwords do not match'
+		}
+		return $scope.errorMessage
+	}
+
+	$scope.initPlayerUser = function() {
+		if ( verifyInput() ) return
+		$https.post(server + '/api/createLogin', newUser)
+			.then(function(returnData) {
+				globalData.user = returnData.player
+
+			})
 		'create new user'
 		'check DB for email'
 			'if so, send verification email'
-		'set as globalData.user'
 		'move to team management'
 	}
 
 	$scope.quickMode = function() {
 		'globalData.user set to email-less player'
 		're-route to team management'
-		'create you first'
+		'create you first; set up user without email'
 	}
 
 

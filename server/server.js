@@ -2,9 +2,11 @@
 var express    = require('express'),
     bodyParser = require('body-parser'),
     logger     = require('morgan'),
-    mongoose   = require('mongoose'),
-    passport   = require('passport')
-var passportConfig = require('./config/passportConfig.js')
+    mongoose   = require('mongoose')
+
+var passport   = require('passport'),
+    passportConfig = require('./config/passportConfig.js')
+    // passportCtrl   = require('./config/passportCtrl.js')
 
 // var mainCtrl   = require('./controllers/mainCtrl.js'),
 var playerCtrl = require('./controllers/playerCtrl.js'),
@@ -33,7 +35,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 
-// API \\
+// Authentication \\
+app.isAuth = function(req, res, next){
+    if(req.isAuthenticated()) { return next() }
+    res.send({error:'not logged in'});
+}
+app.post('/createLogin', passportConfig.createLogin)
+app.post('/login',       passportConfig.login)
+
+// API routes \\
 // app.post('/api/updateGame', mainCtrl.updateGame)
 // app.post('/api/closeGame',  mainCtrl.closeGame)
 

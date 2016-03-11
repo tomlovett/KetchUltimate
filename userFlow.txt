@@ -1,0 +1,32 @@
+//Quick Mode
+	QuickAdd players
+		add successive Handle's until ready to go
+	QuickGame
+		regular game functionality
+		(+Player) button
+
+(everything else is additional fun)
+
+//Permanent User
+Game functionality
+	+Game
+	during game:
+		Manage Team functionality
+Manage Team
+	create/add players
+		onus on adding emails to link players
+	Manage GameRoster - move players on/off game roster
+	Manage FriendList - move players on/off friendList
+
+Rating Mode
+	later
+
+Stats
+	later
+
+//Back-end
+Log-in
+	Load team, team roster, team friendList
+	Special permissions for user
+		edit verified self
+		captains: remove players from friendList
