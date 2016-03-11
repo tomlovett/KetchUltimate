@@ -1,12 +1,12 @@
-angular.module('Ketch').controller('mainCtrl', ['$scope', '$http', 'globalData', function($scope, $http, globalData) {
+angular.module('Ketch').controller('welcomeController', ['$scope', '$http', 'globalData', function($scope, $http, globalData) {
 
 	console.log('mainCtrl')
-
+	var server = ''
 	if (globalData.teams.length < 1) {
 		$http.post('http://localhost:3000/api/loadTeam', {teamID : '56e1e9bf1e32999b39b025be'})
 			.then(function(returnData) {
-				console.log('returnData.data: ', returnData.data)
-				globalData.teams.push(returnData.data)
+				var team = returnData.data
+				globalData.teams[team._id] = team
 				if (returnData.data.roster.length > 0) {
 					returnData.data.roster.forEach(function(playerObj) {
 						console.log(playerObj)

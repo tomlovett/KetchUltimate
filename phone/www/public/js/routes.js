@@ -7,50 +7,65 @@ angular.module('Ketch')
 	.config(function($stateProvider, $urlRouterProvider){
 
 		$stateProvider	
-			.state('home', {
-				url         : '/',
-				templateUrl : './public/views/welcome.html',
-				controller  : 'mainCtrl'
-			})
+		// Login
 			.state('welcome', {
+				url         : '/welcome',
 				templateUrl : '/public/views/welcome.html',
-				controller  : 'mainCtrl'
-			})	// choose entry method; login, create, quickStart; execute
+				controller  : 'welcomeController'
+			})
+			.state('welcome.login', {
+				url         : '/login',
+				templateUrl : '/public/views/snippets/welcome/login.html',
+				controller  : 'welcomeController'
+			})
+			.state('welcome.createSelf', {
+				url         : '/createSelf',
+				templateUrl : '/public/views/snippets/welcome/createSelf.html',
+				controller  : 'welcomeController'
+			})
+
+		// Game
 			.state('game', {
 				url         : '/game',
 				templateUrl : '/public/views/game.html',
 				controller  : 'gameController'
-			}) // edit liveRoster, sub/live views?
+			})
+			.state('game.scoreSummary', {
+				url         : '/scoreSummary',
+				templateUrl : '/public/views/snippets/game/scoreSummary.html',
+				controller  : 'gameController'
+			})
+		// Team management
+			.state('team' , {
+				url         : '/team',
+				templateUrl : '/public/views/team.html',
+				controller  : 'teamController'
+			})
+			.state('team.attachEmails', {
+				url         : '/attachEmails',
+				templateUrl : '/public/views/snippets/team/attachEmails.html',
+				controller  : 'teamController'
+			}) // one snippet for emails and roster management?
+			.state('team.createPlayer', {
+				url         : '/createPlayer',
+				templateUrl : '/public/views/snippets/team/createPlayer.html',
+				controller  : 'teamController'
+			})
+			.state('team.createTeam', {
+				url         : '/createTeam',
+				templateUrl : '/public/views/snippets/team/createTeam.html',
+				controller  : 'teamController'
+			})
+			.state('team.editRoster', {
+				url         : '/editRoster',
+				templateUrl : '/public/views/snippets/team/editRoster.html',
+				controller  : 'teamController'
+			})
+		// Rating
 			.state('ratingMode' , {
 				url         : '/rating',
-				templateUrl : '/public/views/ratingMode.html',
-				controller  : 'ratingMode'
+				templateUrl : '/public/views/ratings.html',
+				controller  : 'ratingController'
 			})
-			.state('manageTeam' , {
-				url         : '/manageTeam',
-				templateUrl : '/public/views/manageTeam.html',
-				controller  : 'manageTeam'
-			})  // create player, attachEmail
-			// .state('teamHistory/:team' , {
-			// 	templateUrl : '/public/views/teamHistory.html',
-			// 	controller  : 'teamHistory'
-			// })
-			// .state('playerHistory/:player' , {
-			// 	templateUrl : '/public/views/playerHistory.html',
-			// 	controller  : 'playerHistory'
-			// })
-			// .state('scoreSummary/:game' , {
-			// 	templateUrl : '/public/views/scoreSummary.html',
-			// 	controller  : 'scoreSummary'
-			// })
-			// .state('teamStats/:team/:game' , {
-			// 	templateUrl : '/public/views/teamStats.html',
-			// 	controller  : 'teamStats'
-			// })
-			// .state('playerStats/:player/:game' , {
-			// 	templateUrl : '/public/views/playerStats.html',
-			// 	controller  : 'playerStats'
-			// })
-
-		$urlRouterProvider.otherwise('/')
+		$urlRouterProvider.otherwise('/welcome')
 	})

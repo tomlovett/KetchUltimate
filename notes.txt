@@ -34,10 +34,7 @@ log-in/create:
 email-verified players can only be edited by logging in as that player
 
 stats last
----
-gotta get shit working. aim for the basics? not thinking too much about what ionic can do
 
-what the fuck is SCSS?
 ---
 
 AJAX login -> server
@@ -45,7 +42,7 @@ server -> user, user_id
 
 ---
 ##demo full functionality, then how quickly it can be built-up
-##Burning Macaroons, CANNED MEAT, Hammers in Paris 
+##Burning Macaroons, CANNED MEAT, Evil Superheroes, Thumbers in Thailand
 
 actually running this through PhoneGap
 

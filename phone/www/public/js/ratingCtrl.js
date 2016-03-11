@@ -1,4 +1,4 @@
-angular.module('Ketch').controller('ratingMode', ['$scope', '$http', 'globalData', function($scope, $http, globalData) {
+angular.module('Ketch').controller('ratingController', ['$scope', '$http', 'globalData', function($scope, $http, globalData) {
 
 	var format = []
 	// self              - 2 height, bday, etc.
