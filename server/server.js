@@ -5,13 +5,15 @@ var express    = require('express'),
     mongoose   = require('mongoose')
 
 var passport   = require('passport'),
-    passportConfig = require('./config/passportConfig.js')
-    // passportCtrl   = require('./config/passportCtrl.js')
+    passportConfig = require('./config/passportConfig.js'),
+    passportCtrl   = require('./config/passportCtrl.js')
 
 // var mainCtrl   = require('./controllers/mainCtrl.js'),
 var playerCtrl = require('./controllers/playerCtrl.js'),
     teamCtrl   = require('./controllers/teamCtrl.js'),
     ratingCtrl = require('./controllers/ratingCtrl.js')
+
+var Player = require('./models/player.js')
 
 // Create Express App Object \\
 var app = express();
@@ -25,23 +27,87 @@ app.sessionMiddleware = session({
 })
 app.use(app.sessionMiddleware)
 
-// Passport hooks into our app
-app.use(passport.initialize())
-app.use(passport.session())
-
 // Application Configuration \\
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 
+// Passport hooks into our app
+var bcrypt = require('bcryptjs')
+var LocalStrategy = require('passport-local').Strategy;
+app.use(passport.initialize())
+app.use(passport.session())
+
+
+passport.serializeUser(function(user, done) {
+    done(null, user.id)
+})
+passport.deserializeUser(function(id, done) {
+    Player.findById(id, function(err, player) {
+        done(err, player)
+    })
+})
+
+passport.use(new LocalStrategy(
+    function(username, password, done) {
+        Player.findOne({ email: username }, function (err, user) {
+            if (err) { return done(err); }
+            if (!user) {
+                return done(null, false, { message: 'Incorrect username.' });
+            }
+            bcrypt.compare(password, user.password, function(error, response){
+                if (response === true){
+                    return done(null,user)
+                }
+                else {
+                    return done(null, false)
+                }
+            })
+        });
+    }
+));
+var initPlayerUser = function(req, res){
+    console.log('initPlayerUser')
+    bcrypt.genSalt(10, function(error, salt){
+        bcrypt.hash(req.body.password, salt, function(hashError, hash) {
+            var player = new Player({
+                email   : req.body.email,
+                password: hash
+            })
+            player.save(function(saveErr, savedPlayer){
+                if ( saveErr ) { res.send({ err: saveErr }) }
+                else { 
+                    req.logIn(savedPlayer, function(loginErr){
+                        if ( loginErr ) { res.send({ err:loginErr }) }
+                        else { res.send(savedPlayer) }
+                    })
+                }
+            })
+        })
+    })
+}
+
+app.post('/api/login', function(req, res, next){
+    passport.authenticate('local', function(err, user, info) {
+        console.log('user, info: ', user, info)
+        if (err) { return next(err); }
+        if (!user) { return res.send({error : 'something went wrong :('}); }
+        req.logIn(user, function(err) {
+            if (err) { return next(err); }
+            return res.send({success:'success'});
+        });
+    })(req, res, next);
+})
+
 // Authentication \\
 app.isAuth = function(req, res, next){
     if(req.isAuthenticated()) { return next() }
     res.send({error:'not logged in'});
 }
-app.post('/createLogin', passportConfig.createLogin)
-app.post('/login',       passportConfig.login)
+
+app.post('/api/initPlayerUser', initPlayerUser)
+// app.post('/api/login',          login)
 
 // API routes \\
 // app.post('/api/updateGame', mainCtrl.updateGame)

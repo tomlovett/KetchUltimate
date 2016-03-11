@@ -1,14 +1,13 @@
-<ion-view>
-	<ion-content>
-		<label class="item item-input">
-		    <input type="text" placeholder="Email">
-		</label>
-		<label class="item item-input">
-		    <input type="password" placeholder="Password">
-		</label>
-		<label class="item item-input">
-		    <input type="password" placeholder="Confirm Password">
-		</label>
-		<button class="button button-positive" ng-click="register()">Submit</button>
-	</ion-content>
-</ion-view>
+<div>
+	<label class="item item-input">
+	    <input type="text" placeholder="Email" ng-model="newUser.email">
+	</label>
+	<label class="item item-input">
+	    <input type="password" placeholder="Password" ng-model="newUser.password">
+	</label>
+	<label class="item item-input">
+	    <input type="password" placeholder="Confirm Password" ng-model="newUser.password2">
+	</label>
+	<button class="button button-positive" ng-click="initPlayerUser()">Submit</button>
+	<p>{{errorMessage}}</p>
+</div>

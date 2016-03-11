@@ -1,5 +1,4 @@
 // Team
-connecting the toggle box to a boolean - help
 refactor code with fresh eyes
 // Welcome
 setting up passport

@@ -1,20 +1,21 @@
 var passport = require('passport')
 var bcrypt   = require('bcryptjs')
+var Player = require('../models/player.js')
 
-var createLogin = function(req, res){
-  // email - password; passes full Player obj
+var initPlayerUser = function(req, res){
+	console.log('initPlayerUser')
     bcrypt.genSalt(10, function(error, salt){
-        bcrypt.hash(req.body.password, salt, function(hashError, hash){
-            req.body.player = {
-                email   : req.body.player.email,
+        bcrypt.hash(req.body.password, salt, function(hashError, hash) {
+            var player = new Player({
+                email   : req.body.email,
                 password: hash
-            }
-            req.body.player.save(function(saveErr, player){
+            })
+            player.save(function(saveErr, savedPlayer){
                 if ( saveErr ) { res.send({ err: saveErr }) }
                 else { 
-                    req.logIn(player, function(loginErr){
+                    req.logIn(savedPlayer, function(loginErr){
                         if ( loginErr ) { res.send({ err:loginErr }) }
-                        else { res.send(player) }
+                        else { res.send(savedPlayer) }
                     })
                 }
             })
@@ -22,7 +23,9 @@ var createLogin = function(req, res){
     })
 }
 var login = function(req, res, next){
+	console.log('login req.body: ', req.body)
     passport.authenticate('local', function(err, player, info) {
+    	console.log('login.player: ', player)
         if (err)     { return next(err); }
         if (!player) { return res.send({error : 'something went wrong :('}); }
         req.logIn(player, function(err) {
@@ -31,7 +34,8 @@ var login = function(req, res, next){
         });
     })(req, res, next);
 }
+
 module.exports = {
-	createLogin : createLogin,
+	initPlayerUser : initPlayerUser,
 	login       : login
 }
