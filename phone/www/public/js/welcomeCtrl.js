@@ -1,28 +1,38 @@
-angular.module('Ketch').controller('welcomeController', ['$scope', '$http', 'globalData', function($scope, $http, globalData) {
+angular.module('Ketch').controller('welcomeController', ['$scope', '$http', 'globalData', 'user', 'team', function($scope, $http, globalData, user, team) {
+
+	var preloadID = '56e23a1d9de24cc03efc5555'
 
 	console.log('welcomeCtrl')
 	$scope.signin = $scope.signin || {}
+
 	var server = 'http://localhost:3000'
-	// if (globalData.teams.length < 1) {
-	// 	$http.post(server + '/api/loadTeam', {teamID : '56e1e9bf1e32999b39b025be'})
-	// 		.then(function(returnData) {
-	// 			var team = returnData.data
-	// 			globalData.teams[team._id] = team
-	// 			if (returnData.data.roster.length > 0) {
-	// 				returnData.data.roster.forEach(function(playerObj) {
-	// 					console.log(playerObj)
-	// 					globalData.friends[playerObj._id] = playerObj
-	// 				})
-	// 			}
-	// 		})
-	// }
+	if (globalData.teams.length < 1) {
+		$http.post(server + '/api/loadTeam', {teamID : preloadID})
+			.then(function(returnData) {
+				team = returnData.data
+				console.log('team: ', team)
+				globalData.teams[team._id] = team
+				if (team.roster.length > 0) {
+					team.roster.forEach(function(playerObj) {
+						globalData.friends[playerObj._id] = playerObj
+					})
+					user = globalData.teams[preloadID].roster[0]
+					console.log('user: ', user)
+				}
+			})
+	}
+
 
 	$scope.login = function() {
 		$http.post(server + '/api/login', $scope.signin)
 			.then(function(returnData) {
+				// incorrect password handling
+				// "email not in DB" handling
 				console.log('login returnData.data: ', returnData.data)
+				user = returnData.data
 				// returns full Player object
 				// assign to globalData.user
+				console.log('user: ', user)
 			})
 		'if email not in database, error message -> email not in DB, '
 		'else if password is incorrect, error message -> try again'
@@ -43,12 +53,12 @@ angular.module('Ketch').controller('welcomeController', ['$scope', '$http', 'glo
 		return $scope.errorMessage
 	}
 
-	$scope.initPlayerUser = function() {
+	$scope.initUser = function() {
 		if ( verifyInput() ) return
 		$http.post(server + '/api/initPlayerUser', $scope.newUser)
 			.then(function(returnData) {
 				console.log(returnData)
-				globalData.user = returnData.player
+				user = returnData.player
 
 			})
 		'check DB for email'
