@@ -1,7 +1,7 @@
 var mongoose = require('mongoose')
 
 var ratingSchema = mongoose.Schema({
-	playerID: String,
+	playerID: { type: String, unique: true },
 	ratings : {
 		type: Object,
 		default: {}
@@ -9,6 +9,8 @@ var ratingSchema = mongoose.Schema({
 })
 
 module.exports = mongoose.model('ratings', ratingSchema)
+
+// have to account for asynchronous request for ratings & answers
 
 // ratings = {
 //  	playerID : 'isaindoinas' <- players collection ID

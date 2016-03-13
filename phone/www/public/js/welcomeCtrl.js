@@ -1,65 +1,81 @@
 angular.module('Ketch').controller('welcomeController', ['$scope', '$http', 'globalData', 'user', 'team', function($scope, $http, globalData, user, team) {
 
-	var preloadID = '56e23a1d9de24cc03efc5555'
+	console.log('team: ', team)
+	console.log('welcomeController')
 
-	console.log('welcomeCtrl')
-	$scope.signin = $scope.signin || {}
+	var server    = 'http://localhost:3000'
+	$scope.signin  = $scope.signin  || {}
+	$scope.newUser = $scope.newUser || {}
 
-	var server = 'http://localhost:3000'
-	if (globalData.teams.length < 1) {
+	var preloadID = '56e4c591cb0602d0489bfea0'
+	var RaviID    = '56e23a279de24cc03efc5556'
+
+	var loadFC = function() {
 		$http.post(server + '/api/loadTeam', {teamID : preloadID})
-			.then(function(returnData) {
-				team = returnData.data
+			.then(function(serverResponse) {
+				team = serverResponse.data
 				console.log('team: ', team)
 				globalData.teams[team._id] = team
 				if (team.roster.length > 0) {
 					team.roster.forEach(function(playerObj) {
-						globalData.friends[playerObj._id] = playerObj
+						globalData.friends.push(playerObj)
 					})
-					user = globalData.teams[preloadID].roster[0]
 					console.log('user: ', user)
 				}
 			})
 	}
+	loadFC()
 
 
 	$scope.login = function() {
 		$http.post(server + '/api/login', $scope.signin)
-			.then(function(returnData) {
-				// incorrect password handling
-				// "email not in DB" handling
-				console.log('login returnData.data: ', returnData.data)
-				user = returnData.data
-				// returns full Player object
-				// assign to globalData.user
-				console.log('user: ', user)
+			.then(function(serverResponse) {
+				if (serverResponse.status !== 200) {
+					handleBadLogin(serverResponse)
+				} else {
+					console.log('login serverResponse: ', serverResponse)
+					user = serverResponse.data
+					console.log(user)
+				}
 			})
-		'if email not in database, error message -> email not in DB, '
-		'else if password is incorrect, error message -> try again'
-		'set player as globalData.user, load teams & friends'
+	}
+
+	var dummyLogin = function(email, password) {
+		$scope.signin = {
+			username: email,
+			password: password
+		}
+		$scope.login()
+	}
+	// dummyLogin('buttface', 'pass')
+
+	var handleBadLogin = function(serverResponse) {
+		console.log('handleBadLogin.serverResponse: ', serverResponse)
+		// incorrect password
+		// "email not in DB"
+			// work off serverResponse.status
 	}
 
 	var verifyInput = function() {
-		$scope.errorMessage = ''
+		console.log('team: ', team)
+		$scope.errMsg = ''
 		if (!$scope.newUser.email) { 
-			$scope.errorMessage += 'Error: No email address\n'
-		}
-		// better regEx? -> \b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b.
+			$scope.errMsg += 'Error: No email address\n'
+		} // better regEx? -> \b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b.
 		if (!$scope.newUser.password || !$scope.newUser.password2) {
-			$scope.errorMessage += 'Error: Missing password'
+			$scope.errMsg += 'Error: Missing password'
 		} else if ($scope.newUser.password !== $scope.newUser.password2) {
-			$scope.errorMessage += 'Error: Passwords do not match'
+			$scope.errMsg += 'Error: Passwords do not match'
 		}
-		return $scope.errorMessage
+		return $scope.errMsg
 	}
 
 	$scope.initUser = function() {
 		if ( verifyInput() ) return
-		$http.post(server + '/api/initPlayerUser', $scope.newUser)
-			.then(function(returnData) {
-				console.log(returnData)
-				user = returnData.player
-
+		$http.post(server + '/api/initUser', $scope.newUser)
+			.then(function(serverResponse) {
+				console.log(serverResponse)
+				user = serverResponse.data
 			})
 		'check DB for email'
 			'if so, send verification email'
@@ -73,5 +89,29 @@ angular.module('Ketch').controller('welcomeController', ['$scope', '$http', 'glo
 		'create you first; set up user without email'
 	}
 
+	var loadUser = function(playerObj) {
+		user = playerObj
+		$http.post(server + '/api/playersTeams', playerObj)
+			.then(function(returnData) {
+				teams = returnData.data
+				console.log('teams: ', returnData.data)
+			})
+		// loadUserFriends()
+	}
+	var loadUserFriends = function() {
+		'tell yo frendzz'
+	}
 
+	var Ravi
+	var loadRavi = function() {
+		$http.post(server + '/api/loadPlayer', {playerID : RaviID})
+			.then(function(serverResponse) {
+				Ravi = serverResponse.data
+				user = Ravi
+				console.log('Ravi: ', Ravi)
+				console.log('user: ', user)
+				loadUser(Ravi)
+			})		
+	}
+	// loadRavi()
 }])

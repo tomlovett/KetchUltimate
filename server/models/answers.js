@@ -1,7 +1,7 @@
 var mongoose = require('mongoose')
 
 var answerSchema = mongoose.Schema({
-	playerID: String,
+	playerID: { type: String, unique: true },
 	answers : { 
 		type: Object,
 		default: {}

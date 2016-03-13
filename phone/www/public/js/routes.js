@@ -23,7 +23,6 @@ angular.module('Ketch')
 				templateUrl : '/public/views/snippets/welcome/createSelf.html',
 				controller  : 'welcomeController'
 			})
-
 		// Game
 			.state('game', {
 				url         : '/game',

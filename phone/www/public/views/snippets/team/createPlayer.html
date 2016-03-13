@@ -15,7 +15,7 @@
 	<p>(Email is not immediately required, but it will make it much easier to link up your players in the future!)</p>
 
 	<h4>Add to teams:</h4>
-	<div class="list"> <!-- list teams, click "on" to add new player to those teams -->
+	<div class="list"> 
 		<div class="item item-toggle align-left" ng-repeat="team in globalData.teams">
 			{{team.name}}
 			<label class="toggle">
@@ -26,6 +26,7 @@
 			</label>
 		</div>
 	</div>
+	<!-- list teams, click "on" to add new player to those teams -->
 	<!-- add display: if no teams -> We recommend creating teams first! -->
 
 	<!-- when switching views after submitting $scope.player still persists -->
@@ -33,6 +34,6 @@
 	<button class="button button-positive" ng-click="submitPlayer('m')">New Guy</button>
 	<button class="button button-assertive" ng-click="submitPlayer('f')">New Girl</button>
 
-	<p ng-show="errorMessage">{{errorMessage}}</p>
+	<p ng-show="errMsg">{{errMsg}}</p>
 
 </div>

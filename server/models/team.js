@@ -11,7 +11,6 @@ var teamSchema = mongoose.Schema({
 
 module.exports = mongoose.model('team', teamSchema)
 
-
 // misc = {
 // 	teamType : club/hat/college/tournament
 // 	ageBracket : HS/college/club/masters/grandmasters

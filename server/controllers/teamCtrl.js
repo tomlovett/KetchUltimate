@@ -30,17 +30,24 @@ var loadTeam = function(req, res) {
 	})
 }
 
+var playersTeams = function(req, res) {
+	Team.find({roster: {$in: [req.body] } }, function(foundTeams) {
+		console.log('foundTeams: ', foundTeams)
+		res.send(foundTeams)
+	})
+}
+
 var addToRoster = function(req, res) {
 	loadFromDB(req, res, function(team){
 		// doesn't add teams to that player
-		team.roster.push(req.body.player)
+		team.roster.push(req.body.playerID)
 		saveToDB(req, res, team)
 	})	
 }
 
-var removeFromRoster = function(req, res) {
+var dropPlayer = function(req, res) {
 	loadFromDB(req, res, function(team) {
-		var index = team.roster.indexOf(req.playerID)
+		var index = team.roster.indexOf(req.player._id)
 		team.roster.splice(index, 1)
 		saveToDB(req, res, team)
 	})
@@ -54,9 +61,10 @@ var makeCaptain = function(req, res) {
 }
 
 module.exports = {
-	createTeam      : createTeam,
-	loadTeam        : loadTeam,
-	addToRoster     : addToRoster,
-	removeFromRoster: removeFromRoster, // cutting down the name, looks weird
-	makeCaptain     : makeCaptain
+	createTeam  : createTeam,
+	loadTeam    : loadTeam,
+	playersTeams: playersTeams,
+	addToRoster : addToRoster,
+	dropPlayer  : dropPlayer, // cutting down the name, looks weird
+	makeCaptain : makeCaptain
 }

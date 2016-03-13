@@ -1,88 +1,114 @@
-angular.module('Ketch').controller('teamController', ['$scope', '$http', 'globalData', function($scope, $http, globalData) {
+angular.module('Ketch').controller('teamController', ['$scope', '$http', 'globalData', 'user', 'team', function($scope, $http, globalData, user, team) {
+
+	console.log('team controller')
+	console.log('team: ', team)
 
 	var server = 'http://localhost:3000'
+	globalData.teams.forEach(function(teamObj) {
+		console.log('forEach team: ', teamObj)
+	})
 
-	globalData.friends = globalData.friends || []
+	$scope.globalData = globalData
+	$scope.populated  = globalData.populated
+	$scope.errMsg = ''
+	$scope.player = $scope.player || {}
+	$scope.addTo  = $scope.addTo  || {}
 
-	// Auto-loading Flaming Croissants
-	if (globalData.teams.length == 0) {
-	$http.post(server + '/api/loadTeam', {teamID : '56e23a1d9de24cc03efc5555'})
-		.then(function(returnData) {
-			var team = returnData.data
-			if (globalData.teams.length == 0 && team !== '') { 
-				globalData.teams.push(team) 
-				returnData.data.roster.forEach(function(playerObj) {
-					globalData.friends.push(playerObj)
-				})
-			}
-		})
+	var populatePlayer = function(playerID) {
+		var player
+		$http.post(server + '/api/loadPlayer', {playerID: playerID})
+			.then(function(serverResponse) {
+				player = serverResponse.data
+				globalData.populated[playerID] = player
+				console.log('gData.populated: ', globalData.populated)
+				return player
+			})
 	}
 
-	$scope.globalData   = globalData
-	$scope.errorMessage = ''
-	$scope.player       = $scope.player || {} // data persistence across views
-	$scope.addTo        = $scope.addTo  || {} 
+	var populateRoster = function(teamObj) {
+		teamObj.roster.forEach(function(playerID) {
+			if (!globalData.populated[playerID])
+				populatePlayer(playerID)
+		})
+		console.log('$scope.populated: ', $scope.populated)
+	}
 
+	var FC
+	var loadFC = function(team) {
+		$http.post(server+'/api/loadTeam', {teamID : "56e4c591cb0602d0489bfea0"})
+			.then(function(serverResponse) {
+				if (globalData.teams.length > 0)  return
+				team = serverResponse.data  // not working. why???
+				FC = serverResponse.data
+				globalData.teams.push(FC)
+				$scope.team = serverResponse.data
+				console.log('FC: ', FC)
+				console.log('team: ', team)
+				console.log('globalData.teams.length: ', globalData.teams.length)
+				populateRoster(FC)
+			})
+	}
+	// loadFC(team)
 // Create Player
 	var checkErrors = function() {
-		$scope.errorMessage = ''
-		if (!$scope.player.firstName) { 
-			$scope.errorMessage += 'Error: No first name.\n'
-		}
-		if (!$scope.player.lastName) {
-			$scope.errorMessage += 'Error: No last name.\n'
-		}
-		return $scope.errorMessage
+		$scope.errMsg = ''
+		if (!$scope.player.firstName)
+			$scope.errMsg += 'Error: No first name.\n'
+		if (!$scope.player.lastName)
+			$scope.errMsg += 'Error: No last name.\n'
+		return $scope.errMsg
 	}
 
 	$scope.submitPlayer = function(gender) {
 		if ( checkErrors() )   { return }
 		// checkDBforPlayer()
 		$scope.player.gender = gender
-		$http.post(server + '/api/newPlayer', $scope.player)
-			.then(function(returnData) {
-				var player = returnData.data
+		$http.post(server + '/api/createPlayer', $scope.player)
+			.then(function(serverResponse) {
+				var player = serverResponse.data
 				globalData.friends.push(player)
-				addToTeams(player)
+				addToTeams(player._id)
 				$scope.player = {}
 			})
 		// add functionality: print/display confirmation, or created player
 	}
 
-	var addToTeams = function(player) {
+	var addToTeams = function(playerID) {
 		for (teamID in $scope.addTo) { 
-			if ($scope.addTo[teamID]) { $scope.addToRoster(player, teamID) }
+			if ($scope.addTo[teamID]) { $scope.addToRoster(playerID, teamID) }
 		}
 	}
 
 	$scope.saveEdits = function(player) {
 		if (checkErrors())   { return }
 		$http.post(server + '/api/editPlayer', $scope.player)
-			.then(function(returnData) {
-				player = returnData.data // modify the thing holding it/?
-				console.log(returnData.data)
+			.then(function(serverResponse) {
+				player = serverResponse.data // modify the thing holding it/?
+				console.log(serverResponse.data)
 			})
 	}
 
 // Edit Roster
-	$scope.editTeam = function(team) {
-		if ($scope.editing == team) $scope.editing = null
-		else                        $scope.editing = team
+	$scope.editTeam = function(teamObj) {
+		console.log('team: ', team)
+		$scope.team = teamObj
+		if ($scope.editing) $scope.editing = false
+		else                $scope.editing = true
 	}
 
-	$scope.addToRoster = function(player, teamID) {
-		if (!teamID)  { return }
-		var idObj = { player: player, teamID: teamID }
+	$scope.addToRoster = function(playerID, teamID) {
+		// if (!teamID)  { return }
+		var idObj = { playerID: playerID, teamID: teamID }
 		$http.post(server + '/api/addToRoster', idObj)
-			.then(function(returnData) {
-				team.roster.push(player)
+			.then(function(serverResponse) {
+				team.roster.push(serverResponse.data)
 			})
 	}
 
-	$scope.removeFromRoster= function(player, teamID) {
-		var idObj = { player: player, teamID: teamID }
-		$http.post(server + '/api/removeFromRoster', idObj)
-			.then(function(returnData) {
+	$scope.removeFromRoster = function(player, teamID) {
+		var idObj = { playerID: player, teamID: teamID }
+		$http.post(server + '/api/dropPlayer', idObj)
+			.then(function(serverResponse) {
 				console.log('player removed!')
 			})		
 	}
@@ -90,11 +116,16 @@ angular.module('Ketch').controller('teamController', ['$scope', '$http', 'global
 	$scope.createTeam = function() {
 		// needs error handling
 		$http.post(server + '/api/createTeam', $scope.newTeam)
-			.then(function(returnData) {
-				globalData.teams.push(returnData.data)
+			.then(function(serverResponse) {
+				globalData.teams.push(serverResponse.data)
+				team = serverResponse.data
 				$scope.newTeam = {}
 				$scope.createdMessage = 'Team created!'
  			})
+	}
+
+	$scope.friendFilter = function(playerID) {
+		return (playerID in editing.roster)
 	}
 
 }])

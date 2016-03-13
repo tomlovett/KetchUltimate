@@ -17,32 +17,42 @@ var saveToDB = function(req, res, player) {
 	})
 }
 
+var ratingsAnswers = function(req, res, player) {
+	console.log('ratingsAnswers fired')
+	var ratings = new Ratings({ playerID : player._id })
+	ratings.save(function(err, storedRatings) {
+		var answers = new Answers({ playerID : player._id })
+		answers.save(function(err, storedAnswers) {
+			res.send(player)				
+		})
+	})
+}
+
 // API functionality
-var newPlayer = function(req, res) {
-	// check DB for email
+var createPlayer = function(req, res) {
 	var player = new Player({
 		firstName : req.body.firstName,
 		lastName  : req.body.lastName,
 		handle    : req.body.handle || req.body.firstName,
 		gender    : req.body.gender,
-		email     : req.body.email || null,
 	})
+	if (req.body.email) { player.email = req.body.email }
+	console.log('player: ', player)
 	player.save(function(err, storedPlayer) {
-		var ratings = new Ratings({
-			playerID : storedPlayer._id
-		})
-		ratings.save(function(err, storedRatings) {
-			var answers = new Answers({
-				playerID : storedPlayer._id
-			})
-			answers.save(function(err, storedAnswers) {
-				res.send(storedPlayer)				
-			})
-		})
+		console.log('error: ', err)
+		console.log('player saved: ', storedPlayer)
+		res.send(storedPlayer)
 	})
 }
 
-var editPlayer = function(req, res) {
+var attachEmail = function(req, res) {
+	loadFromDB(req, res, function(player) {
+		player.email = req.body.email
+		ratingsAnswers(req, res, player)
+	})
+}
+
+var updatePlayer = function(req, res) {
 	loadFromDB(req, res, function(player) {
 		player[firstName] = req.body.firstName,
 		player[lastName]  = req.body.lastName,
@@ -60,7 +70,8 @@ var loadPlayer = function(req, res) {
 }
 
 module.exports = {
-	newPlayer : newPlayer,
-	editPlayer: editPlayer,
-	loadPlayer: loadPlayer
+	createPlayer: createPlayer,
+	updatePlayer: updatePlayer,
+	attachEmail : attachEmail,
+	loadPlayer  : loadPlayer
 }

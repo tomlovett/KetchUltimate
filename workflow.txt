@@ -1,17 +1,18 @@
-
 // Welcome
 passport now returns Player
-	assigning to Global, going from there
 	server.js now ugly though
-assign globalData via signed-in user
-	globalData.setUser(player)
-	team, friends, rosters
 // Team
-splitting up via actual usage
+"team" factory not working; not actually calling in data
+	assignment statements only work local
+	factory not persisting at all
 // Game
 split up game.html in smaller files
 start new game
 // navbar
+
+//server
+	handling log-in request with no user
+	handling create request with existing user
 
 ---
 ##Work

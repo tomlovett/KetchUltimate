@@ -58,28 +58,31 @@ passport.use(new LocalStrategy(function(playerEmail, password, done) {
         })
     })
 }))
-var initPlayerUser = function(req, res){
-    console.log('initPlayerUser')
+var initUser = function(req, res){
     bcrypt.genSalt(10, function(error, salt){
         bcrypt.hash(req.body.password, salt, function(hashError, hash) {
-            var player = new Player({
-                email   : req.body.email,
-                password: hash
-            })
-            player.save(function(saveErr, savedPlayer){
-                if ( saveErr ) { res.send({ err: saveErr }) }
-                else {
-                    req.logIn(savedPlayer, function(loginErr) {
-                        if ( loginErr ) { res.send({ err: loginErr }) }
-                        else            { res.send(savedPlayer)       }
-                    })
-                }
+            Player.find({email: req.body.email}, function(err, playerDoc) {
+                console.log('Player.find playerDoc: ', playerDoc)
+                if (err)                    { res.send(err)               }
+                else if (!playerDoc.length) { var player = new Player({}) }
+                else                        { var player = playerDoc      }
+                player.email    = req.body.email
+                player.password = hash
+                player.save(function(saveErr, savedPlayer){
+                    if ( saveErr ) { res.send({ err: saveErr }) }
+                    else {
+                        req.logIn(savedPlayer, function(loginErr) {
+                            if ( loginErr ) { res.send({ err: loginErr }) }
+                            else            { res.send(savedPlayer)       }
+                        })
+                    }
+                })
             })
         })
     })
 }
 
-app.post('/api/login', function(req, res, next){
+var login = function(req, res, next){
     passport.authenticate('local', function(err, user, info) {
         console.log('user, info: ', user, info)
         if (err) { return next(err); }
@@ -89,7 +92,7 @@ app.post('/api/login', function(req, res, next){
             return res.send(user);
         });
     })(req, res, next)
-})
+}
 
 // Authentication \\
 app.isAuth = function(req, res, next){
@@ -97,21 +100,22 @@ app.isAuth = function(req, res, next){
     res.send({error:'not logged in'});
 }
 
-app.post('/api/initPlayerUser', initPlayerUser)
-
+app.post('/api/initUser', initUser)
+app.post('/api/login',    login)
 // API routes \\
 // app.post('/api/updateGame', mainCtrl.updateGame)
 // app.post('/api/closeGame',  mainCtrl.closeGame)
 
-app.post('/api/createTeam',       teamCtrl.createTeam)
-app.post('/api/loadTeam',         teamCtrl.loadTeam)
-app.post('/api/addToRoster',      teamCtrl.addToRoster)
-app.post('/api/removeFromRoster', teamCtrl.removeFromRoster)
-app.post('/api/makeCaptain',      teamCtrl.makeCaptain)
+app.post('/api/createTeam',   teamCtrl.createTeam)
+app.post('/api/loadTeam',     teamCtrl.loadTeam)
+app.post('/api/playersTeams', teamCtrl.playersTeams)
+app.post('/api/addToRoster',  teamCtrl.addToRoster)
+app.post('/api/dropPlayer',   teamCtrl.dropPlayer)
+app.post('/api/makeCaptain',  teamCtrl.makeCaptain)
 
-app.post('/api/newPlayer',  playerCtrl.newPlayer)
-app.post('/api/editPlayer', playerCtrl.editPlayer)
-app.post('/api/loadPlayer', playerCtrl.loadPlayer)
+app.post('/api/createPlayer', playerCtrl.createPlayer)
+app.post('/api/updatePlayer', playerCtrl.updatePlayer)
+app.post('/api/loadPlayer',   playerCtrl.loadPlayer)
 
 // app.post('/api/recordRating', ratingCtrl.recordRating)
 // app.post('/api/recordAnswer', ratingCtrl.recordAnswer)

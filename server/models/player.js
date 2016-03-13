@@ -5,13 +5,19 @@ var playerSchema = mongoose.Schema({
 	lastName : String,
 	handle   : String,
 	gender   : String,
-	email    : { type: String, unique: true, default: '' },
+	email    : String,
 	password : String,
-	teams    : { type: Array,  default: [] }, // array of team id's
-	friends  : { type: Array,  default: [] }
+	friends  : { type: Array,  default: [] },
+	ratings  : Object,
+	answers  : Object
 	// gameHistory : { type: Array,  default: [] },
 	// pointHistory: { type: Array,  default: [] },
 	// careerStats : { type: Object, default: {} },
 })
+
+/*
+Player.email has to be unique. However, not every created Player has an email. Email defaults to "undefined" which means multiple Players would have the same email, which would lead to errors.
+Thus, email is not required to be unique in the Player model. That is handled in playerCtrl.
+*/
 
 module.exports = mongoose.model('player', playerSchema)
