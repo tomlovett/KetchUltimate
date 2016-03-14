@@ -1,0 +1,14 @@
+<ion-view>
+	<ion-content>
+	    <div ui-view></div>
+
+		<h2>Welcome to Ketch!</h2>
+		<p>What's your deal, man?</p>
+		<a class="button button-block" ui-sref="login.signIn">I have an email registered with Ketch</a>
+
+		<a class="button button-block" ui-sref="login.signUp">I have not registered an email with Ketch</a>
+
+		<a ui-sref="team" ng-show="toTeam">Let's play some ultimate!</a>
+
+	</ion-content>
+</ion-view>

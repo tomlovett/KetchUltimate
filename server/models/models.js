@@ -7,7 +7,7 @@ var playerSchema = mongoose.Schema({
 	gender   : String,
 	email    : String,
 	password : String,
-	friends  : [{type: mongoose.Schema.ObjectId, ref: 'Player'}],
+	// friends  : [{type: mongoose.Schema.ObjectId, ref: 'Player'}],
 	ratings  :  {type: mongoose.Schema.ObjectId, ref: 'Rating'},
 	answers  :  {type: mongoose.Schema.ObjectId, ref: 'Answer'},
 	gameHistory: [{type: mongoose.Schema.ObjectId, ref: 'Game'}],
@@ -31,7 +31,7 @@ var pointSchema = mongoose.Schema({
 })
 
 var gameSchema = mongoose.Schema({
-	team        :  {type: mongoose.Schema.ObjectId, ref: 'Player'},
+	team        :  {type: mongoose.Schema.ObjectId, ref: 'Team'},
 	score       : [0, 0],
 	roster      : [{type: mongoose.Schema.ObjectId, ref: 'Player'}],
 	pointHistory: [{type: mongoose.Schema.ObjectId, ref: 'Point'}],

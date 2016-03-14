@@ -7,16 +7,9 @@ var Game   = Models['Game'],
 
 var mod = {}
 
-// every request sent in needs to access these objects, so I'm abstracting them to cut down on code/clutter
-// var team  = req.session.team  || null,
-// 	game  = req.session.game  || null,
-// 	point = req.session.point || null,
-//     data  = req.body.data
-
-console.log('game controller')
-
 // Middleware
 mod.callTeam = function(req, res, next) {
+	var data  = req.body.data
 	if (!team || team._id !== data.team) {
 		Team.findById(team, function(teamDoc) {
 			req.session.team = teamDoc
@@ -26,6 +19,7 @@ mod.callTeam = function(req, res, next) {
 }
 
 mod.callGame = function(req, res, next) {
+    var data  = req.body.data
 	if (!game || game._id !== data.game) {
 		Game.findById(game, function(gameDoc) {
 			req.session.game = gameDoc
@@ -35,7 +29,8 @@ mod.callGame = function(req, res, next) {
 }
 
 // Functionality
-mod.newGame = function(data) {
+mod.newGame = function(req, res) {
+    var data  = req.body.data
 	var game = new Game({team: data.team})
 	game.save()
 	req.session.game = game
@@ -45,10 +40,14 @@ mod.newGame = function(data) {
 // useful for multiple modules
 var loadRoster = function(team) {
 	var roster = []
-	// team.roster.forEach(function(player) {
-	// 	roster.push(Player.findById(player).exec(processPlayer))
-	// })
-	return roster // async issues? almost surely
+	var index = 0
+	while (index < team.roster.length) {
+		Player.findById(team.roster[index]).then(function(playerDoc) {
+			roster.push(processPlayer(playerDoc))
+			index += 1
+		})
+	} // chained function to avoid async issues
+	return roster
 }
 
 var processPlayer = function(playerObj) {
@@ -62,6 +61,7 @@ var processPlayer = function(playerObj) {
 mod.markScore = function(req, res) {
 	var game  = req.session.game
 	var point = req.session.point
+    var data  = req.body.data
 	if (data.result == 1) { game.score[0] += 1 }
 	else                  { game.score[1] += 1 }
 	point.result = data.result
@@ -74,12 +74,14 @@ mod.markScore = function(req, res) {
 
 mod.markStat = function(req, res) {
 	var point = req.session.point
+    var data  = req.body.data
 	point.stats[data.stat].push(data.player)
 	point.save().then(function() { res.send(200) })
 }
 
 mod.setLine = function(req, res) {
 	var point = req.session.point
+    var data  = req.body.data
 	point.playersOn = data.line
 	point.save().then(function() { res.send(200) })
 }
@@ -96,7 +98,5 @@ mod.closeGame = function(req, res) {
 // 	'burp'
 // 	// later functionality; storing game data like location, opponent, conditions
 // }
-
-console.log('mod: ', mod)
 
 module.exports = mod

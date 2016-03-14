@@ -6,58 +6,84 @@ var Team   = Models['Team'],
 
 var mod = {}
 
-var passSaved = function(product) {
-	res.send(product)
-} // will this work? will this function understand res?
+// req.session.user?, req.session.team, req.session.players
+// {id: '', handle: '', gender: ''}
 
-mod.newPlayer = function() {
-	// {first/last/handle/gender}
-	// create & save Player
-		// no rating/answer
+//Sign in, Create User
+mod.newPlayer = function(req, res) {
+	var data = req.body.data
+	var player = new Player({
+		firstName: data.firstName,
+		lastName : data.lastName,
+		handle   : data.handle,
+		gender   : data.gender,
+	})
+	player.save().exec(function(playerDoc) {
+		res.send(playerDoc)
+	})
 }
 
-mod.newUser = function() {
-	// {first/last/handle/gender/email/pass}
-	// create Player with assigned password/email, Vote/Rating
-	// return playerID
+mod.newUser = function(req, res) {
+	var data = req.body.data
+	var player = new Player({
+		firstName: data.firstName,
+		lastName : data.lastName,
+		handle   : data.handle,
+		gender   : data.gender,
+		email    : data.email,
+		password : data.password,
+	})
+	player.save().then(function(playerDoc) {
+		res.send(playerDoc)
+	})
 }
 
-mod.newTeam = function() {
-	// {name: 'name'}
-	// create team, save, pass
+mod.newTeam = function(req, res) {
+	var data = req.body.data
+	var team = new Team({
+		name: data.name,
+	})
+	team.save().then(function(teamDoc) {
+		req.session.teams.push(teamDoc._id)
+		req.session.team = teamDoc
+		res.send(200)
+	})
 }
 
-mod.userize = function() {
-	// {email : email, password: password}
-	// turns a created player into a full user
+mod.intoRoster = function(req, res) {
+	var data = req.body.data
+	var team = Team.findById(data.team).then(function(teamDoc) {
+		teamDoc.roster.push(data.player)
+		team.save.then(function() { res.send(200) })
+	})	
 }
 
-var attachRatingAnswer = function(playerObj) {
-	// new rating/vote models: {playerID: playerID}
+mod.pushTeamColl = function(req, res) {
+	var data = req.body.data
+	var team = Team.findById(data.team).then(function(teamDoc) {
+		teamDoc[data.coll].push(data.player)
+		team.save.then(function() { res.send(200) })
+	})	
 }
 
-var merge = function() {
-	// in the way, way future
-	// combines data from locally created players into one Player in the database
-}
+mod.popTeamColl = function(req, res) {
+	var data = req.body.data
+	var team = Team.findById(data.team).then(function(teamDoc) {
+		var index = team.coll.indexOf(data.player)
+		team.coll.splice(index, 1)
+		team.save.then(function() { res.send(200) })
+	})
 
-mod.pushColl = function () {
-	// {team: teamID, coll: collection, player: playerID }
-	// add a player to a specifc collection: (captains, friends, roster)
-	// team.coll.push(playerID)
-}
+// future stuff to do
+// var attachRatingAnswer = function(playerObj) {
+// 	// new rating/vote models: {playerID: playerID}
+// }
 
-mod.popColl = function() {
-	// {team: teamID, coll: collection, player: playerID }
-	// remove a player from a collection: (captains, friends, roster)
-	// var index = team.coll.indexOf(player)
-	// team.coll.splice(index, 0)
-
-mod.userFriend = function() {
-	// {player: playerID, friend: playerID }
-	// add a player to user's friend list
-}
+// var merge = function() {
+// 	// in the way, way future
+// 	// combines data from locally created players into one Player in the database
+// }
 
 // save: passSaved = function(err, savedData) { res.send(savedData) }
 
-return mod
+module.exports = mod

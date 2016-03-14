@@ -1,5 +1,5 @@
 angular.module('Ketch')
-.controller('gameController', ['$scope', '$http',function($scope, $http) {
+.controller('game', ['$scope', '$http',function($scope, $http) {
 
 	var server = 'http://localhost:3000'
 

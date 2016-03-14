@@ -8,31 +8,31 @@ angular.module('Ketch')
 
 		$stateProvider	
 		// Login
-			.state('welcome', {
-				url         : '/welcome',
-				templateUrl : '/public/views/welcome.html',
-				controller  : 'welcomeController as welcome'
-			})
-			.state('welcome.login', {
+			.state('login', {
 				url         : '/login',
-				templateUrl : '/public/views/snippets/welcome/login.html',
-				controller  : 'welcomeController'
+				templateUrl : '/public/views/login.html',
+				controller  : 'entry'
 			})
-			.state('welcome.createSelf', {
-				url         : '/createSelf',
-				templateUrl : '/public/views/snippets/welcome/createSelf.html',
-				controller  : 'welcomeController'
+			.state('login.signIn', {
+				url         : '/signIn',
+				templateUrl : '/public/views/snippets/login/signIn.html',
+				controller  : 'entry'
+			})
+			.state('login.signUp', {
+				url         : '/signUp',
+				templateUrl : '/public/views/snippets/login/signUp.html',
+				controller  : 'entry'
 			})
 		// Game
 			.state('game', {
 				url         : '/game',
 				templateUrl : '/public/views/game.html',
-				controller  : 'gameController'
+				controller  : 'game'
 			})
 			.state('game.scoreSummary', {
 				url         : '/scoreSummary',
 				templateUrl : '/public/views/snippets/game/scoreSummary.html',
-				controller  : 'gameController'
+				controller  : 'game'
 			})
 		// Team management
 			.state('team' , {
@@ -66,5 +66,5 @@ angular.module('Ketch')
 				templateUrl : '/public/views/ratings.html',
 				controller  : 'ratingController'
 			})
-		$urlRouterProvider.otherwise('/welcome')
+		$urlRouterProvider.otherwise('/login')
 	})

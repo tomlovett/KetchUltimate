@@ -10,7 +10,7 @@ var passport   = require('passport')
 
 // var mainCtrl   = require('./controllers/mainCtrl.js')
 // var playerCtrl = require('./controllers/playerCtrl.js'),
-    // teamCtrl   = require('./controllers/teamCtrl.js'),
+    // teamCtrl   = require('./controllers/teamCtrl.js')
     // ratingCtrl = require('./controllers/ratingCtrl.js'),
 var game = require('./controllers/gameCtrl.js')
 
@@ -105,8 +105,6 @@ app.isAuth = function(req, res, next){
 app.post('/api/initUser', initUser)
 app.post('/api/login',    login)
 // API routes \\
-console.log('game: ', game)
-console.log('callTeam: ', game.callTeam)
 app.post('/api/newGame',   game.callTeam, game.newGame)
 app.post('/api/markScore', game.callTeam, game.callGame, game.markScore)
 app.post('/api/markStat',  game.callTeam, game.callGame, game.markStat)
