@@ -22,7 +22,7 @@
 <div class="row" ng-show="subMode">
 	<div class="col"></div>
 	<div class="col col-40">
-		<button class="button no-padding" ng-click="setAndStart()">Done Subs</button>
+		<button class="button no-padding" ng-click="doneSubs()">Done Subs</button>
 	</div>
 	<div class="col"></div>
 </div>
@@ -35,7 +35,7 @@
 <div class="row">
 	<div class="col col-25">
 		<ul ng-show="subMode">
-			<li class="male" ng-repeat="guy in team.m.bench" ng-click="fire($index, team.m.bench, team.m.field)">{{guy.handle}}</li>
+			<li ng-repeat="guy in bench" ng-click="fire(guy, bench, field)">{{guy.handle}}</li>
 		</ul>
 		<div ng-hide="subMode">
 			<button class="button button-small button-assertive" ng-click="bonusStat('throwaway')">THROWAWAY</button><br>
@@ -46,17 +46,15 @@
 	</div>
 	<div class="col col-25" ng-show="subMode">
 		<ul>
-			<li class="female" ng-repeat="girl in team.w.bench" ng-click="fire($index, team.w.bench, team.w.field)">{{girl.handle}}</li>
+			<li ng-repeat="girl in bench" ng-click="fire(girl, bench, field)">{{girl.handle}}</li>
 		</ul>
 	</div>
 
 	<div class="col col-25 col-offset-25" id="field">
 		<ul>
-			<li class="female" ng-repeat="player in team.w.field" ng-click="fire($index, team.w.field, team.w.bench)">{{player.handle}}</li>
+			<li ng-repeat="player in field | orderBy: '-gender' " ng-click="fire(player, field, bench)">{{player.handle}}</li>
 		</ul>
-		<ul>
-			<li class="male" ng-repeat="player in team.m.field" ng-click="fire($index, team.m.field, team.m.bench)">{{player.handle}}</li>
-		</ul>
+
 		<button class="button button-small" ng-click="clearLine()" ng-show="subMode">Clear Line</button>
 	</div>
 

@@ -1,189 +1,95 @@
-angular.module('Ketch').controller('gameController', ['$scope', '$http', 'gameUtility', function($scope, $http, gameUtility) {
+angular.module('Ketch')
+.controller('gameController', ['$scope', '$http',function($scope, $http) {
 
-	// Team.importTeam
-	// nameKey[player._id] = player.handle
-		// processing function
 	var server = 'http://localhost:3000'
 
 	$scope.subMode = true
 
-	$scope.selected = ''
-	$scope.metric   = ''
+	$scope.bench = []
+	$scope.field = []
+	$scope.score = [0, 0]
 
-	var point
-	var base = {
-		game: 'gameID',
-		team: 'teamID',
-		point: point
+	$scope.ordered = ['-gender'] 
+
+	var data = {
+		game  : '', 	// gameID
+		team  : '', 	// teamID
+		point : '',  	// pointID
+		result: 0,		// 1 or -1
+		player: '', 	// playerID
+		stat  : '', 	// type
+		line  : [],
 	}
-
-	$scope.game = new gameUtility.Game
-	console.log('$scope.game: ', $scope.game)
-	console.log('gameUtility: ', gameUtility)
+	var roster = [
+		{
+			id    : 'playerID',
+			handle: 'handle',
+			gender: 'gender',
+		},
+	] // loadPlayers
 
 	$scope.score = function(result) {
-		scoreObj
-		$http.post(server + '/api/markScore', )
 		$scope.subMode = true
+		data['result'] = result
+		$http.post(server + '/api/markScore', data).then(function(res) {
+			$scope.score = res.data.score
+		})
 	}
 
-	$scope.setLine = function() {
+	$scope.doneSubs = function() {
 		$scope.subMode = false
-		$scope.logOnField()
-	}
-
-	$scope.startPoint = function() {
-		$scope.game.currentPoint.time = Date.now()
-	}
-
-	$scope.setAndStart = function() {
-		$scope.setLine()
-		$scope.startPoint()
-	}
-
-	$scope.logOnField = function() {
-		$scope.team.m.field.forEach(function(player) {
-			$scope.game.currentPoint.playersOn.push(player)
+		data.line = []
+		$scope.field.forEach(function(playerObj) { 
+			data.line.push(playerObj.id)
 		})
-		$scope.team.w.field.forEach(function(player) {
-			$scope.game.currentPoint.playersOn.push(player)
-		})
+		$http.post(server + '/api/setLine', data)
 	}
 
 	$scope.fire = function(index, from, to) {
 		if ($scope.subMode) { sub(index, from, to) }
-		else 	            { select(index, from)  }
+		else 	            { select(player)  }
 	}
 
-	var sub = function(index, from, to) {
-		var player = from.splice(index, 1)[0]
-		to.push(player)
-		$scope.team.sort()
+	var sub = function(player, from, to) {
+		var index = from.indexOf(player)
+		to.push(from.splice(index, 1)[0])
+		to = _.sortBy(line, 'handle')
 	}
 
-	var select = function(index, group) {
-		if ($scope.selected) { $scope.selected = '' }
+	var select = function(player) {
+		if (data.player) { data.player = '' }
 		else {
-			$scope.selected = group[index]
-			if ($scope.metric) {
-				recordStat($scope.selected, $scope.metric)
+			data.player = player
+			if (data.metric) {
+				recordStat()
 			}
 		}
 	}
-
+	// can combine these two functions, but alas, bigger fish to fry at the moment
 	$scope.bonusStat = function(metric) {
-		if ($scope.metric) { $scope.metric = '' }
+		if (data.metric) { data.metric = '' }
 		else {
-			$scope.metric = metric
-			if ($scope.selected) {
-				recordStat($scope.selected, $scope.metric)
+			data.metric = metric
+			if (data.player) {
+				recordStat()
 			}
 		}
 	}
 
-	var recordStat = function(player, metric) {
-		$scope.game.currentPoint.addMetric(player, metric)
-		$scope.selected = ''
-		$scope.metric   = ''
+	var recordStat = function() {
+		$http.post(server + '/api/markStat', data)
+		data.player = ''
+		data.metric = ''
 	}
 
 	$scope.clearLine = function() {
-		while ($scope.team.m.field.length > 0) {
-			sub(0, $scope.team.m.field, $scope.team.m.bench)
-		} // sub(index, from, to)
-		while ($scope.team.w.field.length > 0) {
-			sub(0, $scope.team.w.field, $scope.team.w.bench)
+		while ($scope.field.length > 0) {
+			sub(0, $scope.field, $scope.bench)
 		}
 	}
-	
+
+	$scope.undo = function() {
+		// stop something you just did
+		// later, bro
+	}
 }])
-
-angular.module('Ketch').factory('gameUtility', function() {
-
-	function Team(teamObj) {
-		// this = teamObj // eh?
-		this.m = { bench: [], field: [] }
-		this.w = { bench: [], field: [] }
-	}
-
-	Team.prototype = {
-		constructor: Team,
-		import: function(player) {
-			if (player.gender == 'm') { this.m.bench.push(player) }
-			else       	              { this.w.bench.push(player) }
-			this.sort()
-		},
-		importTeam: function(teamObj) {
-			teamObj.roster.forEach(function(player){
-				this.import(player)
-			})
-		},
-		addToRoster: function(player) {
-			$http.post('/api/addToRoster', player)
-				.then(function(returnData) {
-					this.import(player)
-				})
-		},
-		sort: function() {
-			this.men.bench   = _.sortBy(this.m.bench, 'handle')
-			this.men.field   = _.sortBy(this.m.field, 'handle')
-			this.women.bench = _.sortBy(this.w.bench, 'handle')
-			this.women.field = _.sortBy(this.w.field, 'handle')
-		},
-	}
-
-	function Point(pulling) {
-		this.pulling   = pulling	// 1 or -1
-		this.startTime = Date.now()
-		this.time      = undefined // init in browser
-		this.playersOn = []
-		this.result    = undefined	// 1 or -1
-		this.stats	   = []
-	}
-
-	Point.prototype = {
-		constructor: Point,
-		recordResult: function(result) {
-			this.result = result
-			this.time = Date.now() - this.time
-		},
-		addMetric: function(player, metric) {
-			this.stats.push(new Metric(player, metric))
-		}
-	}
-
-	function Metric(player, type) {
-		this.player = player
-		this.type   = type
-	}
-
-	function Game() {
-		this.score = [0, 0]
-		this.pointHistory = []
-		this.currentPoint = Point(1)
-	}
-
-	Game.prototype = {
-		constructor: Game,
-		recordPoint: function(result) {
-			this.updateScore(result)
-			this.currentPoint.recordResult(result)
-			this.currentPoint.score = this.score.slice()
-			this.pointHistory.push(this.currentPoint)
-			this.updatePlayerPoints(this.currentPoint)
-			this.currentPoint = new Point(result)
-		},
-		updateScore: function(result) {
-			if (result === 1)  { this.score[0] += 1 }
-			else			   { this.score[1] += 1 }
-		}
-	}
-
-	return {
-		Team  : Team,
-		Point : Point,
-		Metric: Metric,
-		Game  : Game,
-	}
-
-})

@@ -11,7 +11,7 @@ angular.module('Ketch')
 			.state('welcome', {
 				url         : '/welcome',
 				templateUrl : '/public/views/welcome.html',
-				controller  : 'welcomeController'
+				controller  : 'welcomeController as welcome'
 			})
 			.state('welcome.login', {
 				url         : '/login',

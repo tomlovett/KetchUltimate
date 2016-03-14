@@ -32,8 +32,10 @@ var pointSchema = mongoose.Schema({
 
 var gameSchema = mongoose.Schema({
 	team        :  {type: mongoose.Schema.ObjectId, ref: 'Player'},
+	score       : [0, 0]
 	roster      : [{type: mongoose.Schema.ObjectId, ref: 'Player'}],
 	pointHistory: [{type: mongoose.Schema.ObjectId, ref: 'Point'}],
+	livePoint   :  {type: mongoose.Schema.ObjectId, ref: 'Point'},
 	misc        : {}, 
 })
 
