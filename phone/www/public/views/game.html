@@ -1,10 +1,10 @@
 <div class="row scoreboard">
-	<div class="col">{{game.score[0]}}</div>
+	<div class="col">{{score[0]}}</div>
 	<div class="col col-20"> - </div>
-	<div class="col">{{game.score[1]}}</div>
+	<div class="col">{{score[1]}}</div>
 </div>
 <div class="row">
-	<div class="col">{{team.name}}</div>
+	<div class="col">{{team.name}}</div> <!-- some other way of doing name -->
 	<div class="col col-20"></div>
 	<div class="col">THEM</div>
 </div>
@@ -35,7 +35,7 @@
 <div class="row">
 	<div class="col col-25">
 		<ul ng-show="subMode">
-			<li ng-repeat="guy in bench" ng-click="fire(guy, bench, field)">{{guy.handle}}</li>
+			<li ng-repeat="guy in bench | filter: {gender: 'm'}" ng-click="fire(guy, bench, field)">{{guy.handle}}</li>
 		</ul>
 		<div ng-hide="subMode">
 			<button class="button button-small button-assertive" ng-click="bonusStat('throwaway')">THROWAWAY</button><br>
@@ -46,7 +46,7 @@
 	</div>
 	<div class="col col-25" ng-show="subMode">
 		<ul>
-			<li ng-repeat="girl in bench" ng-click="fire(girl, bench, field)">{{girl.handle}}</li>
+			<li ng-repeat="girl in bench | filter: {gender: 'f'}" ng-click="fire(girl, bench, field)">{{girl.handle}}</li>
 		</ul>
 	</div>
 

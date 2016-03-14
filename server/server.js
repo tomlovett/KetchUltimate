@@ -4,16 +4,18 @@ var express    = require('express'),
     logger     = require('morgan'),
     mongoose   = require('mongoose')
 
-var passport   = require('passport'),
-    passportConfig = require('./config/passportConfig.js'),
-    passportCtrl   = require('./config/passportCtrl.js')
+var passport   = require('passport')
+    // passportConfig = require('./config/passportConfig.js'),
+    // passportCtrl   = require('./config/passportCtrl.js')
 
-// var mainCtrl   = require('./controllers/mainCtrl.js'),
-var playerCtrl = require('./controllers/playerCtrl.js'),
-    teamCtrl   = require('./controllers/teamCtrl.js'),
-    ratingCtrl = require('./controllers/ratingCtrl.js')
+// var mainCtrl   = require('./controllers/mainCtrl.js')
+// var playerCtrl = require('./controllers/playerCtrl.js'),
+    // teamCtrl   = require('./controllers/teamCtrl.js'),
+    // ratingCtrl = require('./controllers/ratingCtrl.js'),
+var game = require('./controllers/gameCtrl.js')
 
-var Player = require('./models/player.js')
+var Models = require('./models/models.js')
+var Player = Models['Player']
 
 // Create Express App Object \\
 var app = express();
@@ -103,19 +105,24 @@ app.isAuth = function(req, res, next){
 app.post('/api/initUser', initUser)
 app.post('/api/login',    login)
 // API routes \\
-// app.post('/api/updateGame', mainCtrl.updateGame)
-// app.post('/api/closeGame',  mainCtrl.closeGame)
+console.log('game: ', game)
+console.log('callTeam: ', game.callTeam)
+app.post('/api/newGame',   game.callTeam, game.newGame)
+app.post('/api/markScore', game.callTeam, game.callGame, game.markScore)
+app.post('/api/markStat',  game.callTeam, game.callGame, game.markStat)
+app.post('/api/setLine',   game.callTeam, game.callGame, game.setLine)
+app.post('/api/closeGame', game.callTeam, game.callGame, game.closeGame)
 
-app.post('/api/createTeam',   teamCtrl.createTeam)
-app.post('/api/loadTeam',     teamCtrl.loadTeam)
-app.post('/api/playersTeams', teamCtrl.playersTeams)
-app.post('/api/addToRoster',  teamCtrl.addToRoster)
-app.post('/api/dropPlayer',   teamCtrl.dropPlayer)
-app.post('/api/makeCaptain',  teamCtrl.makeCaptain)
+// app.post('/api/createTeam',   teamCtrl.createTeam)
+// app.post('/api/loadTeam',     teamCtrl.loadTeam)
+// app.post('/api/playersTeams', teamCtrl.playersTeams)
+// app.post('/api/addToRoster',  teamCtrl.addToRoster)
+// app.post('/api/dropPlayer',   teamCtrl.dropPlayer)
+// app.post('/api/makeCaptain',  teamCtrl.makeCaptain)
 
-app.post('/api/createPlayer', playerCtrl.createPlayer)
-app.post('/api/updatePlayer', playerCtrl.updatePlayer)
-app.post('/api/loadPlayer',   playerCtrl.loadPlayer)
+// app.post('/api/createPlayer', playerCtrl.createPlayer)
+// app.post('/api/updatePlayer', playerCtrl.updatePlayer)
+// app.post('/api/loadPlayer',   playerCtrl.loadPlayer)
 
 // app.post('/api/recordRating', ratingCtrl.recordRating)
 // app.post('/api/recordAnswer', ratingCtrl.recordAnswer)

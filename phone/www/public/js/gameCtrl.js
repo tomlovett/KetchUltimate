@@ -88,6 +88,11 @@ angular.module('Ketch')
 		}
 	}
 
+	$scope.closeGame = function() {
+		$http.post(server + '/api/closeGame', data)
+		// other local bullshit
+	}
+
 	$scope.undo = function() {
 		// stop something you just did
 		// later, bro
