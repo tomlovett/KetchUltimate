@@ -6,11 +6,14 @@ var Team   = Models['Team'],
 
 var mod = {}
 
+var passSaved = function(product) {
+	res.send(product)
+} // will this work? will this function understand res?
+
 mod.newPlayer = function() {
 	// {first/last/handle/gender}
 	// create & save Player
 		// no rating/answer
-	}
 }
 
 mod.newUser = function() {
@@ -20,23 +23,24 @@ mod.newUser = function() {
 }
 
 mod.newTeam = function() {
-
+	// {name: 'name'}
+	// create team, save, pass
 }
 
 mod.userize = function() {
+	// {email : email, password: password}
 	// turns a created player into a full user
 }
 
 var attachRatingAnswer = function(playerObj) {
-	// init's answer/rating on a user/obj
+	// new rating/vote models: {playerID: playerID}
 }
 
 var merge = function() {
-	// way future
+	// in the way, way future
 	// combines data from locally created players into one Player in the database
 }
 
-// all below are adding a player to a specific collection of player ID's
 mod.pushColl = function () {
 	// {team: teamID, coll: collection, player: playerID }
 	// add a player to a specifc collection: (captains, friends, roster)
@@ -50,8 +54,10 @@ mod.popColl = function() {
 	// team.coll.splice(index, 0)
 
 mod.userFriend = function() {
+	// {player: playerID, friend: playerID }
 	// add a player to user's friend list
-	// userID, friendID
 }
+
+// save: passSaved = function(err, savedData) { res.send(savedData) }
 
 return mod

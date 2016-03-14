@@ -10,12 +10,20 @@ angular.module('Ketch').controller('gameController', ['$scope', '$http', 'gameUt
 	$scope.selected = ''
 	$scope.metric   = ''
 
+	var point
+	var base = {
+		game: 'gameID',
+		team: 'teamID',
+		point: point
+	}
+
 	$scope.game = new gameUtility.Game
 	console.log('$scope.game: ', $scope.game)
 	console.log('gameUtility: ', gameUtility)
 
 	$scope.score = function(result) {
-		$scope.game.recordPoint(result)
+		scoreObj
+		$http.post(server + '/api/markScore', )
 		$scope.subMode = true
 	}
 

@@ -1,40 +1,47 @@
 var Models = require('../models/model.js')
-var Game   = Models['Game']
+var Game   = Models['Game'],
+	Point  = Models['Point'],
 	Team   = Models['Team'],
-	Player = Models['Player']
+	Player = Models['Player'],
 
-var newGame = function() {
-	// {team : [id], }
-	// teamID
-	}
+var passData = function(product) {
+	res.send(product)
 }
 
-var closeGame = function() {
-	// {game: gameObj}
+var mod = {}
+
+mod.newGame = function(data) {
+	// {teamID : teamID}
+	// mod.game = new Game({team: data.teamID})
+	// pass team! team.liveGame with new Point
+}
+
+mod.closeGame = function(data) {
+	// {game: gameObj, teamID?}
 	// liveGame to team.gameHistory, liveGame = {}
+	// data manipulation
 	// res.send('all good! data received')
-	// heavy data lifting after response sent
 }
 //
-var markScore = function() {
-	// {game: gameObj/ID, point: pointObj/ID}
-	// res.send('received') before handling back-end data with recordPoint
-	// res.send([new Point])
+mod.markScore = function(data) {
+	// {game: gameObj/ID, point: pointObj}
+	// data.game.pointHistory.push(data.point)
+	// data.game.save().send
+	// res.send(new Point()) before handling back-end data with recordPoint
 }
 
-var markStat = function () {
-	// {point: pointObj/ID, stat: 'type', player: playerID}
+mod.markStat = function(data) {
+	// {pointObj: pointObj, stat: 'type', player: playerID}
+	// point.statistics.stat.push(playerID)
 	// add to game.livePoint
 }
 
-var recordPoint = function () {
-	// {game: gameObj/ID, }
+mod.recordPoint = function(data) {
+	// {game: gameID, pointObj: pointObj}
 	// set point.result; push point to gameHistory
 	// point.playersOn.foreach(if not in Game.roster: add)
 }
 
-var sendMisc = function () {
-	'later functionality; storing game data like location, opponent, conditions'
+mod.sendMisc = function(data) {
+	// later functionality; storing game data like location, opponent, conditions
 }
-
-// don't worry so much about errors
