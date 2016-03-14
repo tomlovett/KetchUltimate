@@ -1,5 +1,7 @@
 angular.module('Ketch').controller('teamController', ['$scope', '$http', 'globalData', 'user', 'team', function($scope, $http, globalData, user, team) {
 
+	var vm = this
+
 	console.log('team controller')
 	console.log('team: ', team)
 

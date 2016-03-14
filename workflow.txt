@@ -1,6 +1,5 @@
-// Welcome
-passport now returns Player
-	server.js now ugly though
+controller as; moving data handling to factory
+
 // Team
 "team" factory not working; not actually calling in data
 	assignment statements only work local
@@ -8,6 +7,7 @@ passport now returns Player
 // Game
 split up game.html in smaller files
 start new game
+
 // navbar
 
 //server

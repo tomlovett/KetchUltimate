@@ -1,5 +1,7 @@
 angular.module('Ketch').controller('welcomeController', ['$scope', '$http', 'globalData', 'user', 'team', function($scope, $http, globalData, user, team) {
 
+	var welcome = this
+
 	console.log('team: ', team)
 	console.log('welcomeController')
 
