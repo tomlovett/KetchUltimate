@@ -47,8 +47,10 @@ passport.deserializeUser(function(id, done) {
     })
 })
 
-passport.use(new LocalStrategy(function(playerEmail, password, done) {
-    Player.findOne({ email: playerEmail }, function(err, user) {
+passport.use(new LocalStrategy({
+        usernameField: 'email'
+    }, function(email, password, done) {
+    Player.findOne({ email: email }, function(err, user) {
         if (err)   { return done(err)                                      }
         if (!user) { return done(null, false, { message: 'no such user' }) }
         bcrypt.compare(password, user.password, function(error, response){
@@ -57,6 +59,8 @@ passport.use(new LocalStrategy(function(playerEmail, password, done) {
         })
     })
 }))
+
+
 var signUp = function(req, res){
     bcrypt.genSalt(10, function(error, salt){
         bcrypt.hash(req.body.password, salt, function(hashError, hash) {
@@ -73,8 +77,9 @@ var signUp = function(req, res){
                         req.logIn(savedPlayer, function(loginErr) {
                             if ( loginErr ) { res.send({ err: loginErr }) }
                             else { 
-                                // req.session.user = savedPlayer
-                                res.send(savedPlayer)
+                                //  req.session.user = savedPlayer
+                                // setSession(req, res)
+                                res.send({user: savedPlayer._id})
                             }
                         })
                     }
@@ -86,25 +91,25 @@ var signUp = function(req, res){
 
 var signIn = function(req, res, next){
     passport.authenticate('local', function(err, user, info) {
-        console.log(err)
-        console.log('user, info: ', user, info)
         if (err)   { return next(err); }
-        if (!user) { return res.send({error : 'no user found'}); } // "missing credentials" being thrown
+        if (!user) { return res.send({error : 'no user found'}); }
         req.logIn(user, function(err) {
             if (err) { return next(err); }
-            // req.session.user = user
-            return res.send(user) // dafuq does this return?
+            return res.send({user: user._id})
         });
     })(req, res, next)
 }
 
 var setSession = function(req, res) {
-    console.log('req.session: ', req.session)
     req.session.team = req.body.team || null
+    // req.session.teams
     req.session.user = req.body.user
+    res.send(req.session)
+    console.log('req.session: ', req.session)
 }
 
 var getSession = function(req, res) {
+    console.log('getSession -> req.session: ', req.session)
     res.send(req.session)
 }
 

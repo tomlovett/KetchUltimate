@@ -1,9 +1,3 @@
-Looking pretty good now. Built up a lot of functionality today with very little code. This paradigm of passing tiny data objects is pretty sweet and very easy to work with. I think I can keep building on this.
+don't know how to arrange for persistent data. req.session didn't work on my get/set session functions. does passport carry stuff throughout the app?
 
-Going through the user flow from sign-in to team management to game.
-	"no user found" in sign-in: line 92
-	might just be DB being down; couldn't get it up!
-
-make sure game flow works
-	will likely hit many small bugs
-	style game to basic functionality
+And there is still the issue of deployment, running it on the phone; I can get that help from other students at least.
