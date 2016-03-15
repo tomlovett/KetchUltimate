@@ -10,7 +10,7 @@ var mod = {}
 // Middleware
 mod.callTeam = function(req, res, next) {
 	var data  = req.body.data
-	if (!team || team._id !== data.team) {
+	if (!req.session.team || req.session.team._id !== data.team) {
 		Team.findById(team, function(teamDoc) {
 			req.session.team = teamDoc
 			next()
@@ -20,7 +20,7 @@ mod.callTeam = function(req, res, next) {
 
 mod.callGame = function(req, res, next) {
     var data  = req.body.data
-	if (!game || game._id !== data.game) {
+	if (!req.session.game || req.sessiob.game._id !== data.game) {
 		Game.findById(game, function(gameDoc) {
 			req.session.game = gameDoc
 			next()
@@ -42,10 +42,11 @@ var loadRoster = function(team) {
 	var roster = []
 	var index = 0
 	while (index < team.roster.length) {
-		Player.findById(team.roster[index]).then(function(playerDoc) {
-			roster.push(processPlayer(playerDoc))
-			index += 1
-		})
+		Player.findById(team.roster[index])
+			.then(function(playerDoc) {
+				roster.push(processPlayer(playerDoc))
+				index += 1
+			})
 	} // chained function to avoid async issues
 	return roster
 }

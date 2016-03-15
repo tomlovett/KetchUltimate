@@ -1,14 +1,10 @@
 <div>
-	<div ng-hide="globalData.teams" class="row">
-		<p>No teams to edit!</p>
-	</div>
-
-	<div> <!-- List local teams; click to edit -->
+	<div> 
 		<h4>Edit Rosters</h4>
 		<ul class="list">
-			<li class="item align-left" ng-hide="editing" ng-repeat="team in globalData.teams" ng-click="editTeam(team)">{{team.name}}</li>
+			<li class="item align-left" ng-hide="editing" ng-repeat="team in req.sessionn.teams" ng-click="editTeam(team)">{{team.name}}</li>
 		</ul>
-		<!-- teamControl.globalData -->
+
 	</div>
 
 	<div> <!-- Display team being edited with "Done" button -->

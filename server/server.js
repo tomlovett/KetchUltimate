@@ -8,11 +8,8 @@ var passport   = require('passport')
     // passportConfig = require('./config/passportConfig.js'),
     // passportCtrl   = require('./config/passportCtrl.js')
 
-// var mainCtrl   = require('./controllers/mainCtrl.js')
-// var playerCtrl = require('./controllers/playerCtrl.js'),
-    // teamCtrl   = require('./controllers/teamCtrl.js')
-    // ratingCtrl = require('./controllers/ratingCtrl.js'),
-var game = require('./controllers/gameCtrl.js')
+var game = require('./controllers/scorekeeper.js')
+var mgmt = require('./controllers/manager.js')
 
 var Models = require('./models/models.js')
 var Player = Models['Player']
@@ -60,7 +57,7 @@ passport.use(new LocalStrategy(function(playerEmail, password, done) {
         })
     })
 }))
-var initUser = function(req, res){
+var signUp = function(req, res){
     bcrypt.genSalt(10, function(error, salt){
         bcrypt.hash(req.body.password, salt, function(hashError, hash) {
             Player.find({email: req.body.email}, function(err, playerDoc) {
@@ -75,7 +72,10 @@ var initUser = function(req, res){
                     else {
                         req.logIn(savedPlayer, function(loginErr) {
                             if ( loginErr ) { res.send({ err: loginErr }) }
-                            else            { res.send(savedPlayer)       }
+                            else { 
+                                // req.session.user = savedPlayer
+                                res.send(savedPlayer)
+                            }
                         })
                     }
                 })
@@ -84,16 +84,28 @@ var initUser = function(req, res){
     })
 }
 
-var login = function(req, res, next){
+var signIn = function(req, res, next){
     passport.authenticate('local', function(err, user, info) {
+        console.log(err)
         console.log('user, info: ', user, info)
-        if (err) { return next(err); }
-        if (!user) { return res.send({error : 'something went wrong :('}); }
+        if (err)   { return next(err); }
+        if (!user) { return res.send({error : 'no user found'}); } // "missing credentials" being thrown
         req.logIn(user, function(err) {
             if (err) { return next(err); }
-            return res.send(user);
+            // req.session.user = user
+            return res.send(user) // dafuq does this return?
         });
     })(req, res, next)
+}
+
+var setSession = function(req, res) {
+    console.log('req.session: ', req.session)
+    req.session.team = req.body.team || null
+    req.session.user = req.body.user
+}
+
+var getSession = function(req, res) {
+    res.send(req.session)
 }
 
 // Authentication \\
@@ -102,28 +114,31 @@ app.isAuth = function(req, res, next){
     res.send({error:'not logged in'});
 }
 
-app.post('/api/initUser', initUser)
-app.post('/api/login',    login)
-// API routes \\
+app.post('/api/signUp', signUp)
+app.post('/api/signIn', signIn)
+app.post('/api/setSession', setSession)
+app.get( '/api/session',    getSession)
+// API routes \\         //game.callTeam & game.callGame are middleware
 app.post('/api/newGame',   game.callTeam, game.newGame)
-app.post('/api/markScore', game.callTeam, game.callGame, game.markScore)
-app.post('/api/markStat',  game.callTeam, game.callGame, game.markStat)
-app.post('/api/setLine',   game.callTeam, game.callGame, game.setLine)
-app.post('/api/closeGame', game.callTeam, game.callGame, game.closeGame)
+app.post('/api/markScore', game.callGame, game.markScore)
+app.post('/api/markStat',                 game.markStat)
+app.post('/api/setLine',                  game.setLine)
+app.post('/api/closeGame', game.callTeam, game.closeGame)
 
-// app.post('/api/createTeam',   teamCtrl.createTeam)
-// app.post('/api/loadTeam',     teamCtrl.loadTeam)
-// app.post('/api/playersTeams', teamCtrl.playersTeams)
-// app.post('/api/addToRoster',  teamCtrl.addToRoster)
-// app.post('/api/dropPlayer',   teamCtrl.dropPlayer)
-// app.post('/api/makeCaptain',  teamCtrl.makeCaptain)
+app.post('/api/newTeam',      mgmt.newTeam)
+app.post('/api/newPlayer',    mgmt.newPlayer)
+app.post('/api/intoRoster',   mgmt.intoRoster)
+app.post('/api/pushTeamColl', mgmt.pushTeamColl)
+app.post('/api/popTeamColl',  mgmt.popTeamColl)
 
-// app.post('/api/createPlayer', playerCtrl.createPlayer)
-// app.post('/api/updatePlayer', playerCtrl.updatePlayer)
-// app.post('/api/loadPlayer',   playerCtrl.loadPlayer)
+app.post('/api/playersTeams',  mgmt.playersTeams)
+app.post('/api/rawRoster',     mgmt.rawRoster)
+app.post('/api/playerDetails', mgmt.playerDetails)
+app.post('/api/fullPlayer',    mgmt.fullPlayer)
+app.post('/api/updatePlayer',  mgmt.updatePlayer)
 
-// app.post('/api/recordRating', ratingCtrl.recordRating)
-// app.post('/api/recordAnswer', ratingCtrl.recordAnswer)
+
+// app.post('/api/rating', ratingCtrl.recordRating)
 
 // Creating Server and Listening for Connections \\
 var port = 3000

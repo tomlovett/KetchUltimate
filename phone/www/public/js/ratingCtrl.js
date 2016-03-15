@@ -1,4 +1,4 @@
-angular.module('Ketch').controller('ratingController', ['$scope', '$http', 'globalData', function($scope, $http, globalData) {
+angular.module('Ketch').controller('ratingController', ['$scope', '$http', function($scope, $http) {
 
 	var server = 'http://localhost:3000'
 

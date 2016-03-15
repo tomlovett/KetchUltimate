@@ -29,22 +29,22 @@ angular.module('Ketch')
 				templateUrl : '/public/views/game.html',
 				controller  : 'game'
 			})
-			.state('game.scoreSummary', {
-				url         : '/scoreSummary',
-				templateUrl : '/public/views/snippets/game/scoreSummary.html',
-				controller  : 'game'
-			})
+			// .state('game.scoreSummary', {
+			// 	url         : '/scoreSummary',
+			// 	templateUrl : '/public/views/snippets/game/scoreSummary.html',
+			// 	controller  : 'game'
+			// })
 		// Team management
 			.state('team' , {
 				url         : '/team',
 				templateUrl : '/public/views/team.html',
 				controller  : 'teamController'
 			})
-			.state('team.attachEmails', {
-				url         : '/attachEmails',
-				templateUrl : '/public/views/snippets/team/attachEmails.html',
-				controller  : 'teamController'
-			}) // one snippet for emails and roster management?
+			// .state('team.attachEmails', {
+			// 	url         : '/attachEmails',
+			// 	templateUrl : '/public/views/snippets/team/attachEmails.html',
+			// 	controller  : 'teamController'
+			// }) // one snippet for emails and roster management?
 			.state('team.createPlayer', {
 				url         : '/createPlayer',
 				templateUrl : '/public/views/snippets/team/createPlayer.html',

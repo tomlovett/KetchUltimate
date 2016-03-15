@@ -1,15 +1,15 @@
-angular.module('Ketch').controller('entry', ['$scope', '$http', function($scope, $http) {
+angular.module('Ketch').controller('entry', ['$scope', '$http', '$state', function($scope, $http, $state) {
 
-	$scope.toTeam = false
+	var server = 'http://localhost:3000'
 
-	$scope.createUser = function() {
-		$http.post(server + '/api/createUser', $scope.newUser)
+	$scope.signUp = function() {
+		$http.post(server + '/api/signUp', $scope.newUser)
 			.then(function(res) {
 				badSignUp(res)
 				console.log('we assume you followed the rules!')
 				console.log('how do we move you to the next step?')
-				$scope.toTeam = true
-			}
+				goodLogin(res.data)
+			})
 	}
 
 	var badSignUp = function(res) {
@@ -17,22 +17,28 @@ angular.module('Ketch').controller('entry', ['$scope', '$http', function($scope,
 		// pre-existing email
 	}
 
-	$scope.login = function() {
-		$http.post(server + '/api/login', $scope.signin)
+	$scope.signIn = function() {
+		$http.post(server + '/api/signIn', $scope.signin)
 			.then(function(res) {
 				if (res.status !== 200) {
 					handleBadLogin(res)
 				} else {
-					$scope.toTeam = true
+					goodLogin(res.data)
 				}
 			})
 	}
 
-	var badLogin = function(res) {
+	var signIn = function(res) {
 		console.log('handleBadLogin.res: ', res)
 		// incorrect password
 		// "email not in DB"
 			// work off res.status
+	}
+
+	var goodLogin = function(user) {
+		console.log('goodLogin -> user: ', user)
+		$http.post(server + '/api/setSession', {user: user})
+			.then($state.go('team'))
 	}
 
 }])

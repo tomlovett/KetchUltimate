@@ -3,6 +3,13 @@ angular.module('Ketch')
 
 	var server = 'http://localhost:3000'
 
+	var session
+	$http.get(server + '/api/session')
+		.then(function(res) {
+			session = res.data
+			console.log('session: ', session)
+		})
+
 	$scope.subMode = true
 
 	$scope.bench = []
@@ -14,6 +21,7 @@ angular.module('Ketch')
 	var data = {
 		game  : '', 	// gameID
 		team  : '', 	// teamID
+		roster: [],
 		point : '',  	// pointID
 		result: 0,		// 1 or -1
 		player: '', 	// playerID
