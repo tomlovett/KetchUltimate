@@ -10,24 +10,29 @@ angular.module('Ketch')
 			console.log('session: ', session)
 		})
 
-	$scope.subMode = true
+	$rootScope.subMode = true
 
-	$scope.bench = []
-	$scope.field = []
-	$scope.score = [0, 0]
+	$rootScope.bench = []
+	$rootScope.field = []
+	$rootScope.score = [0, 0]
 
 	$scope.ordered = ['-gender'] 
 
 	var data = {
-		game  : '', 	// gameID
-		team  : '', 	// teamID
-		roster: [],
-		point : '',  	// pointID
+		user  : 'playerID'
+		game  : 'gameID', 	// gameID
+		team  : 'teamID', 	// teamID
+		roster: ['playerID', 'playerID'],
+		point : 'pointID',  	// pointID
 		result: 0,		// 1 or -1
-		player: '', 	// playerID
-		stat  : '', 	// type
+		player: 'playerID', 	// playerID
+		stat  : 'string', 	// type
 		line  : [],
 	}
+
+	// user : 
+	// My functions are built around the idea of keep
+
 	var roster = [
 		{
 			id    : 'playerID',
@@ -37,25 +42,32 @@ angular.module('Ketch')
 	] // loadPlayers
 
 	$scope.score = function(result) {
-		$scope.subMode = true
-		data['result'] = result
-		$http.post(server + '/api/markScore', data).then(function(res) {
+		$rootScope.subMode = true
+		$http.post(server + '/api/markScore', {
+			result: result,
+			game  : $rootScope.game,
+			point : $rootScope.point
+		}).then(function(res) {
 			$scope.score = res.data.score
+			$scope.point
 		})
 	}
 
 	$scope.doneSubs = function() {
-		$scope.subMode = false
-		data.line = []
-		$scope.field.forEach(function(playerObj) { 
-			data.line.push(playerObj.id)
+		$rootScope.subMode = false
+		$rootScope.line = []
+		$rootScope.field.forEach(function(playerObj) { 
+			$rootScope.line.push(playerObj.id)
 		})
-		$http.post(server + '/api/setLine', data)
+		$http.post(server + '/api/setLine', {
+			line: $rootScope.line,
+			point: $rootScope.point,
+		})
 	}
 
 	$scope.fire = function(index, from, to) {
-		if ($scope.subMode) { sub(index, from, to) }
-		else 	            { select(player)  }
+		if ($rootScope.subMode) { sub(index, from, to) }
+		else 	                { select(player)       }
 	}
 
 	var sub = function(player, from, to) {

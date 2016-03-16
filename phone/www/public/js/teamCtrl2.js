@@ -2,14 +2,6 @@ angular.module('Ketch').controller('teamController', ['$scope', '$http', functio
 
 	var server = 'http://localhost:3000'
 
-	console.log('teamController')
-	var session
-	$http.get(server + '/api/session')
-		.then(function(res) {
-			session = res.data
-			console.log('session: ', session)
-		})
-
 	var roster = [
 		{
 			id    : 'playerID',
@@ -21,20 +13,21 @@ angular.module('Ketch').controller('teamController', ['$scope', '$http', functio
 	$scope.editTeam = function(team) {
 		if ($scope.editing) { $scope.editing = null }
 		else {
-			session.team   = team
-			$scope.editing = team
+			$rootScope.editing = team
 			$http.post(server + '/api/rawRoster', {team: team})
 				.then(function(res) {
-					$scope.editing.roster = res.data
+					$rootScope.editing.roster = res.data
 				})
 		}
 	}
 
 	$scope.createTeam = function() {
 		$http.post(server + '/api/newTeam', {name: $scope.newTeam.name})
-			.then(function(res) { 
+			.then(function(res) {
 				console.log('res: ', res)
-				$scope.newTeam = {}})
+				$rootScope.teams.push(res.data)
+				$scope.newTeam = {}
+			})
 	}
 
 	$scope.createPlayer = function() {
@@ -55,8 +48,8 @@ angular.module('Ketch').controller('teamController', ['$scope', '$http', functio
 
 	$scope.addToRoster = function() {
 		var data = {
-			team  : session.team,
-			player: player.id,
+			team  : $rootScope.team,
+			player: $rootScope.player.id,
 		}
 		$http.post(server + '/api/intoRoster', data)
 			.then(function() {

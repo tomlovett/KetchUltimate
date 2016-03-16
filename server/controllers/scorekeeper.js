@@ -60,17 +60,19 @@ var processPlayer = function(playerObj) {
 }
 
 mod.markScore = function(req, res) {
-	var game  = req.session.game
-	var point = req.session.point
-    var data  = req.body.data
+    var data  = req.body
+	var game  = req.body.game
+	var point = req.body.point
 	if (data.result == 1) { game.score[0] += 1 }
 	else                  { game.score[1] += 1 }
 	point.result = data.result
 	point.save()
 	game.roster = _.union(game.roster, point.playersOn)
 	game.pointHistory.push(point)
-	req.session.point = new Point()
-	game.save().then(function() { res.send(game.score)	})
+	var newPoint = new Point()
+	game.save().then(function() { 
+		res.send({score: game.score, point: newPoint})	
+	})
 }
 
 mod.markStat = function(req, res) {

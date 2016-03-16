@@ -1,3 +1,7 @@
 don't know how to arrange for persistent data. req.session didn't work on my get/set session functions. does passport carry stuff throughout the app?
 
 And there is still the issue of deployment, running it on the phone; I can get that help from other students at least.
+
+Forget RefactorU. You are building your app for yourself and your friends. Ideally have full functionality for thursday, no major issue if it isn't. Beefing with their bullshit isn't going to help, really. You do you, you work hard, get help if you can, power through regardless. You do you. Expect nothing in return. If you get it up and running you'll have a sick demonstration video to share with your friends; if it's garbage don't do it or b.s. your way through. Edibles are a good idea to let off that tension/stress.
+
+Fuck this shit. Fuck refactoru.

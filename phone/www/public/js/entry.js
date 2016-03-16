@@ -1,20 +1,16 @@
-angular.module('Ketch').controller('entry', ['$scope', '$http', '$state', function($scope, $http, $state) {
+angular.module('Ketch').controller('entry', ['$rootScope', '$scope', '$http', '$state', function($rootScope, $scope, $http, $state) {
 
 	var server = 'http://localhost:3000'
 
 	var handleLogin = function(res) {
 		if (!res.data.error) {
-			console.log('handleLogin -> res: ', res)
-			// console.log('goodLogin -> user: ', user)
-			$http.post(server + '/api/setSession', {
-				user: res.data.user
-			})
-				.then($state.go('team'))
+			$rootScope.user = res.data.user
+			console.log($rootScope)
+			$state.go('team')
 		} else {
 			console.log('bad login:', res.data.error)
-			$http.post(server + '/api/setSession', {user: res.data.user})
-				.then(function() {$http.get(server + '/api/session')} )
-				.then($state.go('team'))
+			console.log('try again')
+			$scope.signin.password = ''
 		}
 	}
 
@@ -24,7 +20,6 @@ angular.module('Ketch').controller('entry', ['$scope', '$http', '$state', functi
 	}
 
 	$scope.signIn = function() {
-		console.log('$scope.signin: ', $scope.signin)
 		$http.post(server + '/api/signIn', $scope.signin)
 			.then(handleLogin)
 	}

@@ -10,6 +10,15 @@ var mod = {}
 // {id: '', handle: '', gender: ''}
 
 // Sign in, Create User
+
+var toShallow = function(playerDoc) {
+	return {
+		id    : playerDoc._id,
+		handle: playerDoc.handle,
+		gender: playerDob.gender,
+	}
+}
+
 mod.newPlayer = function(req, res) {
 	var data = req.body
 	var player = new Player({
@@ -19,7 +28,7 @@ mod.newPlayer = function(req, res) {
 		gender   : data.gender,
 	})
 	player.save().exec(function(playerDoc) {
-		res.send(playerDoc)
+		res.send(toShallow(playerDoc))
 	})
 }
 
@@ -33,8 +42,9 @@ mod.newUser = function(req, res) {
 		email    : data.email,
 		password : data.password,
 	})
+	req.session.user = player._id
 	player.save().then(function(playerDoc) {
-		res.send(playerDoc)
+		res.send(toShallow(playerDoc))
 	})
 }
 
@@ -44,12 +54,7 @@ mod.newTeam = function(req, res) {
 		name: data.name,
 	})
 	team.save().then(function(teamDoc) {
-		console.log(req.session)
-		if (!req.sessions.teams) { req.session.teams = [teamDoc._id]   }
-		else  		             { req.session.teams.push(teamDoc._id) }
-		req.session.team = teamDoc._id
-		console.log('gonna send')
-		res.send(200)
+		res.send({id: teamDoc._id, name: teamDoc.name})
 	})
 }
 
@@ -57,7 +62,9 @@ mod.intoRoster = function(req, res) {
 	var data = req.body
 	var team = Team.findById(data.team).then(function(teamDoc) {
 		teamDoc.roster.push(data.player)
-		team.save().then(function() { res.send(200) })
+		team.save().then(function() { 
+			res.send({id: teamDoc._id, name: teamDoc.name})
+			})
 	})	
 }
 
@@ -82,6 +89,7 @@ mod.playersTeams = function(req, res) {
 	Team.find({roster: {$in: req.body.player}}).then(function(teamDocs) {
 		console.log('teamDocs: ', teamDocs)
 		res.send(teamDocs) // team id's
+		// not sure if this will work, not great with DB's
 	})
 }
 
@@ -93,16 +101,13 @@ mod.rawRoster = function(req, res) {
 
 mod.playerDetails = function(req, res) {
 	Player.findById(req.body.player).then(function(playerDoc) {
-		res.send({
-			id    : playerDoc._id,
-			handle: playerDoc.handle,
-			gender: playerDoc.gender,
-		})
+		res.send(toShallow(playerDoc))
 	})
 }
 
 mod.fullPlayer = function(req, res) {
 	Player.findById(req.body.player).then(function(playerDoc) {
+		playerDoc.password = ''
 		res.send(playerDoc)
 	})
 }
@@ -110,11 +115,7 @@ mod.fullPlayer = function(req, res) {
 mod.updatePlayer = function(req, res) {
 	var player = req.body
 	Player.update({_id: player.ID}, player).then(function(playerDoc) {
-		res.send({
-			id    : playerDoc._id,
-			handle: playerDoc.handle,
-			gender: playerDoc.gender,
-		})
+		res.send(toShallow(playerDoc))
 	})
 }
 
