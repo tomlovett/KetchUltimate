@@ -3,15 +3,37 @@ angular.module('Ketch')
 
 	var server = 'http://localhost:3000'
 
+	var verifyGameReadiness = function() {
+		http.post(server + '/api/newGame')
+			.then(function(res) { $rootScope.game = res.data }) // gameID
+		$rootScope.bench = $rootScope.team.roster
+	}
+
+	// console.log('$rootScope: ', $rootScope)
+
+	var loadGame = function() {
+		$http.post(server + '/api/deepRoster', {team: $rootScope.team})
+			.then(function(res) {
+				$rootScope.roster = res.data
+				$rootScope.roster.forEach(function(player) {
+					$rootScope.bench.push(player)
+				})
+				$http.post(server + '/api/newGame', {team: $rootScope.team})
+					.then(function(nextRes) {
+						$rootScope.point = nextRes.data.point
+						$rootScope.game  = nextRes.data.game
+					})
+			})
+	}
+
 	if (!$rootScope.bench) {
 		$rootScope.bench = []
 		$rootScope.field = []
 		$rootScope.score = [0, 0]
 		$rootScope.subMode = true
 		if (!$rootScope.team) {
-
-			// load pre-stored team for game run
-			// push to bench - functionality
+			$rootScope.team = '56e8f88ae89c9b5208b8f211' // Dark Side
+			loadGame()
 		}
 	}
 
@@ -28,32 +50,17 @@ angular.module('Ketch')
 		line  : [],
 	}
 
-	var roster = [
-		{
-			id    : 'playerID',
-			handle: 'handle',
-			gender: 'gender',
-		},
-	]
-
-	var loadGame = function() {
-		$http.post(server + '/api/rawRoster', {team: $rootScope.team})
-			.then(function(res) {
-				$rootScope.roster = res.data
-				console.log('loadGame -> $rs.roster: ', $rootScope.roster)
-			})
-	}
-
 	$scope.score = function(result) {
 		$rootScope.subMode = true
 		$http.post(server + '/api/markScore', {
 			result: result,
 			game  : $rootScope.game,
 			point : $rootScope.point
-		}).then(function(res) {
-			$rootScope.score = res.data.score
-			$rootScope.point = res.data.point
 		})
+			.then(function(res) {
+				$rootScope.score = res.data.score
+				$rootScope.point = res.data.point
+			})
 	}
 
 	$scope.doneSubs = function() {
@@ -68,36 +75,15 @@ angular.module('Ketch')
 		})
 	}
 
-	$scope.fire = function(index, from, to) {
-		if ($rootScope.subMode) { sub(index, from, to) }
+	$scope.fire = function(player, from, to) {
+		if ($rootScope.subMode) { sub(player, from, to) }
 		else 	                { select(player)       }
 	}
 
 	var sub = function(player, from, to) {
 		var index = from.indexOf(player)
 		to.push(from.splice(index, 1)[0])
-		to = _.sortBy(line, 'handle')
-		// verify that this works; the splice-y bullshit
-	}
-
-	var select = function(player) {
-		if ($scope.player) { $scope.player = '' }
-		else {
-			$scope.player = player
-			if ($scope.metric) {
-				recordStat()
-			}
-		}
-	}
-	// can combine these two functions, but alas, bigger fish to fry at the moment
-	$scope.bonusStat = function(metric) {
-		if ($scope.metric) { $scope.metric = '' }
-		else {
-			$scope.metric = metric
-			if ($scope.player) {
-				recordStat()
-			}
-		}
+		to = _.sortBy(to, 'handle')
 	}
 
 	var recordStat = function() {
@@ -111,6 +97,26 @@ angular.module('Ketch')
 		$scope.metric = ''
 	}
 
+	var select = function(player) {
+		if ($scope.player) { $scope.player = '' }
+		else {
+			$scope.player = player
+			if ($scope.metric) {
+				recordStat()
+			}
+		}
+	}
+	
+	$scope.bonusStat = function(metric) {
+		if ($scope.metric) { $scope.metric = '' }
+		else {
+			$scope.metric = metric
+			if ($scope.player) {
+				recordStat()
+			}
+		}
+	}
+
 	$scope.clearLine = function() {
 		while ($rootScope.field.length > 0) {
 			sub(0, $rootScope.field, $rootScope.bench)
@@ -119,7 +125,8 @@ angular.module('Ketch')
 
 	$scope.closeGame = function() {
 		$http.post(server + '/api/closeGame')
-		// local stuff
+		// local management
+			// 
 	}
 
 	// $scope.undo = function() {

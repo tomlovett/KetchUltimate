@@ -62,13 +62,11 @@ mod.newTeam = function(req, res) {
 mod.intoRoster = function(req, res) {
 	Team.findById(req.body.team).then(function(teamDoc) {
 		teamDoc.roster.push(req.body.player.id)
-		console.log('intoRoster -> teamDoc: ', teamDoc)
 		teamDoc.save().then(function() { res.send(basicTeam(teamDoc)) })
 	})	
 }
 
 mod.pushTeamColl = function(req, res) {
-	var data = req.body
 	Team.findById(req.body.team).then(function(teamDoc) {
 		teamDoc[req.body.coll].push(req.body.player)
 		teamDoc.save().then(function(teamDocTwo) { 
@@ -100,6 +98,20 @@ mod.rawRoster = function(req, res) {
 		console.log('teamDoc: ', teamDoc)
 		res.send(teamDoc.roster)
 	})
+}
+
+mod.deepRoster = function(req, res) {
+	var deep = []
+	Team.findById(req.body.team)
+		.then(function(teamDoc) {
+			teamDoc.roster.forEach(function(playerID) {
+				Player.findById(playerID)
+					.then(function(playerDoc) {
+						deep.push(basicPlayer(playerDoc))
+						if (teamDoc.roster.indexOf(playerID) == teamDoc.roster.length-1 ) { res.send(deep) }
+				})
+			})
+		})
 }
 
 mod.playerDetails = function(req, res) {

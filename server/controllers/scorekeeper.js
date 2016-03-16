@@ -7,99 +7,79 @@ var Game   = Models['Game'],
 
 var mod = {}
 
-// Middleware
-mod.callTeam = function(req, res, next) {
-	var data  = req.body.data
-	if (!req.session.team || req.session.team._id !== data.team) {
-		Team.findById(team, function(teamDoc) {
-			req.session.team = teamDoc
-			next()
-		})
-	} else { next()	}
-}
-
-mod.callGame = function(req, res, next) {
-    var data  = req.body.data
-	if (!req.session.game || req.sessiob.game._id !== data.game) {
-		Game.findById(game, function(gameDoc) {
-			req.session.game = gameDoc
-			next()
-		})
-	} else { next() }
-}
-
 // Functionality
 mod.newGame = function(req, res) {
-    var data  = req.body.data
-	var game = new Game({team: data.team})
-	game.save()
-	req.session.game = game
-	res.send(loadRoster(team))
-}
-
-// useful for multiple modules
-var loadRoster = function(team) {
-	var roster = []
-	var index = 0
-	while (index < team.roster.length) {
-		Player.findById(team.roster[index])
-			.then(function(playerDoc) {
-				roster.push(processPlayer(playerDoc))
-				index += 1
+	var game = new Game({team: req.body.team, score: [0, 0]})
+	var point = new Point()
+	point.save().then(function(pointDoc) {
+		game.livePoint = pointDoc._id
+		game.save(function(err, gameDoc) { 
+			res.send({
+				game: gameDoc._id,
+				point: pointDoc._id,
 			})
-	} // chained function to avoid async issues
-	return roster
-}
-
-var processPlayer = function(playerObj) {
-	return {
-		id    : playerObj._id,
-		handle: playerObj.handle,
-		gender: playerObj.gender,
-	}
+		})
+	})
 }
 
 mod.markScore = function(req, res) {
-    var data  = req.body
-	var game  = req.body.game
-	var point = req.body.point
-	if (data.result == 1) { game.score[0] += 1 }
-	else                  { game.score[1] += 1 }
-	point.result = data.result
-	point.save()
-	game.roster = _.union(game.roster, point.playersOn)
-	game.pointHistory.push(point)
-	var newPoint = new Point()
-	game.save().then(function() { 
-		res.send({score: game.score, point: newPoint._id})	
+    Game.findById(req.body.game, function(err, gameDoc) {
+    	// gameDoc.score reverting to [0,0] every time
+		Point.findById(req.body.point, function(err, pointDoc) {
+			console.log('gameDoc.score: ', gameDoc.score)
+			pointDoc.result = req.body.result
+			gameDoc.roster = _.union(gameDoc.roster, pointDoc.playersOn)
+			// union just appending
+			gameDoc.pointHistory.push(pointDoc)
+			var stats = {drop: [], throwaway: [], D: [], goldStar: []} 
+			var newPoint = new Point({statistics: stats})
+			gameDoc.livePoint = newPoint._id
+			newPoint.save()
+			console.log('gameDoc: ', gameDoc)
+			console.log('pointDoc: ', pointDoc)
+			pointDoc.save(function(err, pointTwo) {
+				if (req.body.result == 1) { gameDoc.score[0] += 1 }
+				else                      { gameDoc.score[1] += 1 }
+				gameDoc.save(function() {
+					console.log('gameDoc.score: ', gameDoc.score)
+					res.send({
+						score: gameDoc.score,
+						point: gameDoc.livePoint,
+					})
+				})
+			})
+    	})
 	})
 }
 
 mod.markStat = function(req, res) {
-	var point = req.session.point
-    var data  = req.body.data
-	point.stats[data.stat].push(data.player)
-	point.save()
-		.then(function(savedPoint) { res.send(savedPoint) })
+    Point.findById(req.body.point, function(err, pointDoc) {
+    	// neither functioning nor throwing an error
+    	var stat = req.body.stat
+		pointDoc.statistics.stat.push(req.body.player)
+		pointDoc.save().then(res.send(200))
+	})
 }
 
 mod.setLine = function(req, res) {
-    var data  = req.body
-	point.playersOn = data.line
-	point.save().then(function() { res.send(200) })
+    Point.findById(req.body.point)
+    	.then(function(pointDoc) {
+    		pointDoc.playersOn = req.body.line
+    		pointDoc.save()
+    			.then(function() { res.send() })
+    	})
 }
 
 mod.closeGame = function(req, res) {
+	// needs re-tooling
 	var team = req.body.team
 	team.gameHistory.push(team.liveGame)
 	team.liveGame    = null
-	req.session.game = null
 	team.save().then(function() { res.send(200) })
 }
 
 // mod.sendMisc = function(req, res) {
-// 	'burp'
-// 	// later functionality; storing game data like location, opponent, conditions
+	// later functionality; storing game data like location, opponent, conditions
 // }
 
 module.exports = mod

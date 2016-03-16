@@ -25,23 +25,26 @@ angular.module('Ketch').controller('teamController', ['$rootScope', '$scope', '$
 		$rootScope.players = []
 	}
 
-	var rosterTo = function() {
-		$scope.editing.roster.forEach(function(playerID) {
-			var index = $scope.editing.roster.indexOf(playerID)
-			$http.post(server + '/api/fullPlayer', {player: playerID})
-				.then(function(res) { 
-					$scope.editing.roster[index] = res.data
-				})
-		})
-		console.log('$scope.editing.roster: ', $scope.editing.roster)
-	}
+	// var rosterTo = function() {
+	// 	$scope.editing.roster.forEach(function(playerID) {
+	// 		var index = $scope.editing.roster.indexOf(playerID)
+	// 		$http.post(server + '/api/fullPlayer', {player: playerID})
+	// 			.then(function(res) { 
+	// 				$scope.editing.roster[index] = res.data
+	// 			})
+	// 	})
+	// 	console.log('$scope.editing.roster: ', $scope.editing.roster)
+	// }
 
 	$scope.editTeam = function(team) {
 		if ($scope.editing) { $scope.editing = false }
 		else {
 			$scope.editing = team
-			$scope.editing.roster = team.roster
-			rosterTo()
+			$http.post(server + '/api/deepRoster', {team: team.id})
+				.then(function(res) {
+					$scope.editing.roster = res.data
+					console.log('$scope.editing.roster: ', $scope.editing.roster)
+				})
 		}
 	}
 

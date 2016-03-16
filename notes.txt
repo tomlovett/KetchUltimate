@@ -6,4 +6,10 @@ Forget RefactorU. You are building your app for yourself and your friends. Ideal
 
 Fuck this shit. Fuck refactoru.
 ---
-I'm gonna fuck this shit up so hard. You don't even know.
+Game score is continually reverting to [0, 0]. Is this an issue with so many nested DB operations?
+
+Everything else is working pretty good, though, right?
+
+Styling. Deploying. Rating mode.
+
+Good shit, Tom. Good shit.
