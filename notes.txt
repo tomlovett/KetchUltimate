@@ -11,5 +11,3 @@ Game score is continually reverting to [0, 0]. Is this an issue with so many nes
 Everything else is working pretty good, though, right?
 
 Styling. Deploying. Rating mode.
-
-Good shit, Tom. Good shit.

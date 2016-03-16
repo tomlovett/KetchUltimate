@@ -1,8 +1,8 @@
 <div class="row">
-	<div class="col">vs. {{game.opponent}}</div>
+	<div class="col">vs. {{opponent}}</div>
 </div>
 
-<div class="row" ng-repeat="point in game.pointHistory">
+<div class="row" ng-repeat="point in $root.gameSummary">
 	<div class="col col-40">
 		<div ng-show="point.result" ng-click="expand($index)">Time: {{point.totalTime}}</div>
 		<div ng-show="expandPoints[$index]">
@@ -16,10 +16,12 @@
 	</div>
 
 	<div class="col col-40">
-		<div ng-show="point.result" ng-click="expand($index)">Time: {{point.totalTime}}</div>
+		<div ng-hide="point.result" ng-click="expand($index)">Time: {{point.totalTime}}</div>
 		<div ng-show="expandPoints[$index]">
 			<p>Line: <span ng-repeat="player in point.playersOn">{{player.handle}} </span></p>
 			<p>{{point.stats}}</p>
 		</div>
 	</div>
 </div>
+
+<a ui-sref="game.liveGame">Back to Game</a>

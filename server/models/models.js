@@ -25,9 +25,10 @@ var teamSchema = mongoose.Schema({
 })
 
 var pointSchema = mongoose.Schema({
-	playersOn : [{type: mongoose.Schema.ObjectId, ref: 'Player'}],
-	statistics: {type: Object, default: {drop: [], throwaway: [], D: [], goldStar: []} } ,
-	result    : Number,
+	line  : [{type: mongoose.Schema.ObjectId, ref: 'Player'}],
+	stats : {type: Object, default: {drop: [], throwaway: [], D: [], goldStar: []} } ,
+	result: Number,
+	score : Array,
 })
 
 var gameSchema = mongoose.Schema({

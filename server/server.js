@@ -119,6 +119,10 @@ app.post('/api/markStat',  game.markStat)
 app.post('/api/setLine',   game.setLine)
 app.post('/api/closeGame', game.closeGame)
 
+app.post('/api/callHistory',  game.callHistory)
+app.post('/api/pointDetails', game.pointDetails)
+
+
 app.post('/api/newTeam',      mgmt.newTeam)
 app.post('/api/newPlayer',    mgmt.newPlayer)
 app.post('/api/intoRoster',   mgmt.intoRoster)
@@ -127,7 +131,7 @@ app.post('/api/popTeamColl',  mgmt.popTeamColl)
 
 app.post('/api/playersTeams',  mgmt.playersTeams)
 app.post('/api/rawRoster',     mgmt.rawRoster)
-app.post('/api/deepRoster',     mgmt.deepRoster)
+app.post('/api/deepRoster',    mgmt.deepRoster)
 app.post('/api/playerDetails', mgmt.playerDetails)
 app.post('/api/fullPlayer',    mgmt.fullPlayer)
 app.post('/api/updatePlayer',  mgmt.updatePlayer)

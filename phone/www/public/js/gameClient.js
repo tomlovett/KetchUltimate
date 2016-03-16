@@ -1,5 +1,5 @@
 angular.module('Ketch')
-.controller('game', ['$rootScope', '$scope', '$http',function($rootScope, $scope, $http) {
+.controller('game', ['$rootScope', '$scope', '$http', '$state', function($rootScope, $scope, $http, $state) {
 
 	var server = 'http://localhost:3000'
 
@@ -37,28 +37,17 @@ angular.module('Ketch')
 		}
 	}
 
-	var rootScope = {
-		user  : 'playerID',
-		game  : 'gameID', 	// gameID
-		team  : 'teamID', 	// teamID
-		teams : [],
-		roster: ['playerID', 'playerID'],
-		point : 'pointID',  	// pointID
-		result: 0,		// 1 or -1
-		player: 'playerID', 	// playerID
-		stat  : 'string', 	// type
-		line  : [],
-	}
-
 	$scope.score = function(result) {
 		$rootScope.subMode = true
+		if (result === 1)    { $rootScope.score[0] += 1 }
+		else                 { $rootScope.score[1] += 1 }
 		$http.post(server + '/api/markScore', {
 			result: result,
 			game  : $rootScope.game,
-			point : $rootScope.point
+			point : $rootScope.point,
+			score : $rootScope.score
 		})
 			.then(function(res) {
-				$rootScope.score = res.data.score
 				$rootScope.point = res.data.point
 			})
 	}
@@ -83,6 +72,7 @@ angular.module('Ketch')
 	var sub = function(player, from, to) {
 		var index = from.indexOf(player)
 		to.push(from.splice(index, 1)[0])
+		// _sortBy not firing properly
 		to = _.sortBy(to, 'handle')
 	}
 
@@ -100,10 +90,8 @@ angular.module('Ketch')
 	var select = function(player) {
 		if ($scope.player) { $scope.player = '' }
 		else {
-			$scope.player = player
-			if ($scope.metric) {
-				recordStat()
-			}
+			$scope.player = player.id
+			if ($scope.metric) { recordStat() }
 		}
 	}
 	
@@ -111,9 +99,7 @@ angular.module('Ketch')
 		if ($scope.metric) { $scope.metric = '' }
 		else {
 			$scope.metric = metric
-			if ($scope.player) {
-				recordStat()
-			}
+			if ($scope.player) { recordStat() }
 		}
 	}
 
@@ -127,6 +113,21 @@ angular.module('Ketch')
 		$http.post(server + '/api/closeGame')
 		// local management
 			// 
+	}
+
+	$scope.loadScoreSummary = function() {
+		$state.go('game.scoreSummary')
+		$http.post(server + '/api/callHistory', {game: $rootScope.game})
+			.then(function(res) {
+				$rootScope.gameSummary = res.data
+				$rootScope.gameSummary.forEach(function(pointID) {
+					$http.post(server + '/api/pointDetails', {point: pointID})
+						.then(function(pointRes) {
+							var index = $rootScope.gameSummary.indexOf(pointID)
+							$rootScope.gameSummary[index] = pointRes.data
+						})
+				})
+			})
 	}
 
 	// $scope.undo = function() {

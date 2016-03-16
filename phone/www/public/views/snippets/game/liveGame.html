@@ -1,0 +1,68 @@
+<div class="row scoreboard">
+	<div class="col">{{$root.score[0]}}</div>
+	<div class="col col-20"> - </div>
+	<div class="col">{{$root.score[1]}}</div>
+</div>
+<div class="row">
+	<div class="col">{{team.name}}</div> <!-- some other way of doing name -->
+	<div class="col col-20"></div>
+	<div class="col">THEM</div>
+</div>
+
+<div class="row" ng-hide="subMode"> 
+	<div class="col col-40">
+		<button class="button button-balanced" ng-click="score(1)">We scored!!</button>
+	</div>
+	<div class="col"></div>
+	<div class="col col-40">
+		<button class="button button-assertive" ng-click="score(0)">They scored</button>
+	</div>
+</div>
+
+<div class="row" ng-show="subMode">
+	<div class="col"></div>
+	<div class="col col-40">
+		<button class="button no-padding" ng-click="doneSubs()">Done Subs</button>
+	</div>
+	<div class="col"></div>
+</div>
+
+<div class="row">
+	<div class="col-33">Bench</div>
+	<div class="col-33 col-offset-33">Field</div>
+</div>
+
+<div class="row">
+	<div class="col col-25">
+		<ul ng-show="subMode">
+			<li ng-repeat="guy in $root.bench | filter: {gender: 'm'}" ng-click="fire(guy, $root.bench, $root.field)">{{guy.handle}}</li>
+		</ul>
+		<div ng-hide="subMode">
+			<button class="button button-small button-assertive" ng-click="bonusStat('throwaway')">THROWAWAY</button><br>
+			<button class="button button-small button-assertive" ng-click="bonusStat('drop')">DROP</button><br>
+			<button class="button button-small button-balanced" ng-click="bonusStat('D')">D</button><br>
+			<button class="button button-small button-energized" ng-click="bonusStat('goldStar')">GOLD STAR</button>
+		</div>
+	</div>
+	<div class="col col-25" ng-show="subMode">
+		<ul>
+			<li ng-repeat="girl in $root.bench | filter: {gender: 'f'}" ng-click="fire(girl, $root.bench, $root.field)">{{girl.handle}}</li>
+		</ul>
+	</div>
+
+	<div class="col col-25 col-offset-25" id="field">
+		<ul>
+			<li ng-repeat="player in $root.field | orderBy: ['-gender', '+name'] " ng-click="fire(player, $root.field, $root.bench)">{{player.handle}}</li>
+		</ul>
+
+		<button class="button button-small" ng-click="clearLine()" ng-show="subMode">Clear Line</button>
+	</div>
+
+</div>
+
+<div ng-hide="subMode">
+	<p ng-show="selected">Selected: {{selected.handle}}</p>
+	<p ng-show="metric">Metric: {{metric}}</p>
+</div>
+
+<a ng-click="loadScoreSummary()">Score Summary</a>

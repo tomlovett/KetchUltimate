@@ -29,11 +29,16 @@ angular.module('Ketch')
 				templateUrl : '/public/views/game.html',
 				controller  : 'game'
 			})
-			// .state('game.scoreSummary', {
-			// 	url         : '/scoreSummary',
-			// 	templateUrl : '/public/views/snippets/game/scoreSummary.html',
-			// 	controller  : 'game'
-			// })
+			.state('game.liveGame', {
+				url         : '/liveGame',
+				templateUrl : '/public/views/snippets/game/liveGame.html',
+				controller  : 'game'
+			})			
+			.state('game.scoreSummary', {
+				url         : '/scoreSummary',
+				templateUrl : '/public/views/snippets/game/scoreSummary.html',
+				controller  : 'game'
+			})
 		// Team management
 			.state('team' , {
 				url         : '/team',
