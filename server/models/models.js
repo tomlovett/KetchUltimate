@@ -16,7 +16,7 @@ var playerSchema = mongoose.Schema({
 
 var teamSchema = mongoose.Schema({
 	name       : String,
-	roster     : [{type: mongoose.Schema.ObjectId, ref: 'Player'}],
+	roster     : [{type: mongoose.Schema.ObjectId, ref: 'Player', default: []}],
 	captains   : [{type: mongoose.Schema.ObjectId, ref: 'Player'}],
 	friends    : [{type: mongoose.Schema.ObjectId, ref: 'Player'}],
 	gameHistory: [{type: mongoose.Schema.ObjectId, ref: 'Game'}],

@@ -71,7 +71,7 @@ mod.markScore = function(req, res) {
 	game.pointHistory.push(point)
 	var newPoint = new Point()
 	game.save().then(function() { 
-		res.send({score: game.score, point: newPoint})	
+		res.send({score: game.score, point: newPoint._id})	
 	})
 }
 
@@ -79,12 +79,12 @@ mod.markStat = function(req, res) {
 	var point = req.session.point
     var data  = req.body.data
 	point.stats[data.stat].push(data.player)
-	point.save().then(function() { res.send(200) })
+	point.save()
+		.then(function(savedPoint) { res.send(savedPoint) })
 }
 
 mod.setLine = function(req, res) {
-	var point = req.session.point
-    var data  = req.body.data
+    var data  = req.body
 	point.playersOn = data.line
 	point.save().then(function() { res.send(200) })
 }

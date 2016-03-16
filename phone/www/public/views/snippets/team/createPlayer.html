@@ -16,10 +16,10 @@
 
 	<h4>Add to teams:</h4>
 	<div class="list"> 
-		<div class="item item-toggle align-left" ng-repeat="team in globalData.teams">
+		<div class="item item-toggle align-left" ng-repeat="team in $root.teams">
 			{{team.name}}
 			<label class="toggle">
-				<input ng-model="addTo[team._id]" type="checkbox">
+				<input ng-model="addTo[team.name]" type="checkbox">
 				<div class="track">
 					<div class="handle"></div>
 				</div>
@@ -31,8 +31,8 @@
 
 	<!-- when switching views after submitting $scope.player still persists -->
 
-	<button class="button button-positive" ng-click="submitPlayer('m')">New Guy</button>
-	<button class="button button-assertive" ng-click="submitPlayer('f')">New Girl</button>
+	<button class="button button-positive" ng-click="createPlayer('m')">New Guy</button>
+	<button class="button button-assertive" ng-click="createPlayer('f')">New Girl</button>
 
 	<p ng-show="errMsg">{{errMsg}}</p>
 

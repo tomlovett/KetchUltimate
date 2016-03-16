@@ -104,42 +104,6 @@ var signIn = function(req, res, next){
     })(req, res, next)
 }
 
-// app.use(function(req, res, next) {
-//     console.log('req.session :', req.session)
-//     if (req.body) {
-//         if (!req.session.data) { 
-//             req.session.data = {}
-//             console.log('req.session.data created')
-//             }
-//         _.keys(req.body).forEach(function(key) {
-//             req.session.data[key] = req.body[key]
-
-//         })
-//         req.session.store()
-//         console.log('setSesston -> req.session: ', req.session)
-//         next()
-//     } else {
-//         console.log('empty req.body')
-//         next()
-//     }
-// })
-
-app.get('/cookie', function(req, res) {
-    res.cookie('cookie_name', 'cookie-value')
-    res.send('cookie is set')
-})
-
-// var getSession = function(req, res) {
-//     console.log('getSession -> req.cookie: ', req.cookie)
-//     res.send(req.cookie)
-// }
-
-var setCookie = function(req, res) {
-    console.log('res.cookie')
-    res.cookie('foo', 'bar')
-    res.send('success')
-}
-
 // Authentication \\
 app.isAuth = function(req, res, next){
     if(req.isAuthenticated()) { return next() }
@@ -148,9 +112,6 @@ app.isAuth = function(req, res, next){
 
 app.post('/api/signUp', signUp)
 app.post('/api/signIn', signIn)
-// app.post('/api/setSession', setSession)
-// app.post('/api/session', getSession)
-app.post('/api/setCookie', setCookie)
 // API routes \\         //game.callTeam & game.callGame are middleware
 app.post('/api/newGame',   game.callTeam, game.newGame)
 app.post('/api/markScore', game.callGame, game.markScore)

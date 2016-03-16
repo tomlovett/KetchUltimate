@@ -6,16 +6,19 @@ var Team   = Models['Team'],
 
 var mod = {}
 
-// req.session.user?, req.session.team, req.session.players
-// {id: '', handle: '', gender: ''}
-
-// Sign in, Create User
-
-var toShallow = function(playerDoc) {
+var basicPlayer = function(playerDoc) {
 	return {
 		id    : playerDoc._id,
 		handle: playerDoc.handle,
-		gender: playerDob.gender,
+		gender: playerDoc.gender,
+	}
+}
+
+var basicTeam = function(teamDoc) {
+	return {
+		id    : teamDoc._id,
+		name  : teamDoc.name,
+		roster: teamDoc.roster,
 	}
 }
 
@@ -24,11 +27,11 @@ mod.newPlayer = function(req, res) {
 	var player = new Player({
 		firstName: data.firstName,
 		lastName : data.lastName,
-		handle   : data.handle,
+		handle   : data.handle || data.firstName,
 		gender   : data.gender,
 	})
-	player.save().exec(function(playerDoc) {
-		res.send(toShallow(playerDoc))
+	player.save(function(err, playerDoc) {
+		res.send(basicPlayer(playerDoc))
 	})
 }
 
@@ -37,51 +40,50 @@ mod.newUser = function(req, res) {
 	var player = new Player({
 		firstName: data.firstName,
 		lastName : data.lastName,
-		handle   : data.handle,
+		handle   : data.handle || data.firstName,
 		gender   : data.gender,
 		email    : data.email,
 		password : data.password,
 	})
-	req.session.user = player._id
-	player.save().then(function(playerDoc) {
-		res.send(toShallow(playerDoc))
+	player.save(function(err, playerDoc) {
+		res.send(basicPlayer(playerDoc))
 	})
 }
 
 mod.newTeam = function(req, res) {
-	var data = req.body
 	var team = new Team({
-		name: data.name,
+		name: req.body.name,
 	})
 	team.save().then(function(teamDoc) {
-		res.send({id: teamDoc._id, name: teamDoc.name})
+		res.send(basicTeam(teamDoc))
 	})
 }
 
 mod.intoRoster = function(req, res) {
-	var data = req.body
-	var team = Team.findById(data.team).then(function(teamDoc) {
-		teamDoc.roster.push(data.player)
-		team.save().then(function() { 
-			res.send({id: teamDoc._id, name: teamDoc.name})
-			})
+	Team.findById(req.body.team).then(function(teamDoc) {
+		teamDoc.roster.push(req.body.player.id)
+		console.log('intoRoster -> teamDoc: ', teamDoc)
+		teamDoc.save().then(function() { res.send(basicTeam(teamDoc)) })
 	})	
 }
 
 mod.pushTeamColl = function(req, res) {
 	var data = req.body
-	Team.findById(data.team).then(function(teamDoc) {
-		teamDoc[data.coll].push(data.player)
-		teamDoc.save().then(function() { res.send(200) })
+	Team.findById(req.body.team).then(function(teamDoc) {
+		teamDoc[req.body.coll].push(req.body.player)
+		teamDoc.save().then(function(teamDocTwo) { 
+			res.send(basicTeam(teamDocTwo))
+		})
 	})	
 }
 
 mod.popTeamColl = function(req, res) {
-	var data = req.body
-	var team = Team.findById(data.team).then(function(teamDoc) {
-		var index = team.coll.indexOf(data.player)
-		team.coll.splice(index, 1)
-		team.save().then(function() { res.send(200) })
+	Team.findById(req.body.team).then(function(teamDoc) {
+		var index = teamDoc.coll.indexOf(req.body.player)
+		teamDoc.coll.splice(index, 1)
+		teamDoc.save().then(function(teamDocTwo) { 
+			res.send(basicTeam(teamDocTwo))
+		})
 	})
 }
 
@@ -95,19 +97,20 @@ mod.playersTeams = function(req, res) {
 
 mod.rawRoster = function(req, res) {
 	Team.findById(req.body.team).then(function(teamDoc) {
+		console.log('teamDoc: ', teamDoc)
 		res.send(teamDoc.roster)
 	})
 }
 
 mod.playerDetails = function(req, res) {
 	Player.findById(req.body.player).then(function(playerDoc) {
-		res.send(toShallow(playerDoc))
+		res.send(basicPlayer(playerDoc))
 	})
 }
 
 mod.fullPlayer = function(req, res) {
 	Player.findById(req.body.player).then(function(playerDoc) {
-		playerDoc.password = ''
+		if (playerDoc.password)    { delete playerDoc.password }
 		res.send(playerDoc)
 	})
 }
@@ -115,7 +118,7 @@ mod.fullPlayer = function(req, res) {
 mod.updatePlayer = function(req, res) {
 	var player = req.body
 	Player.update({_id: player.ID}, player).then(function(playerDoc) {
-		res.send(toShallow(playerDoc))
+		res.send(basicPlayer(playerDoc))
 	})
 }
 
