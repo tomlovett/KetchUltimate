@@ -1,6 +1,6 @@
 angular.module('Ketch').controller('teamController', ['$rootScope', '$scope', '$http', function($rootScope, $scope, $http) {
 
-	var server = 'http://45.55.173.156/'
+	var server = 'http://159.203.69.177/'
 
 	$scope.addTo = {}
 
