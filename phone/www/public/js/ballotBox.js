@@ -5,7 +5,7 @@ angular.module('Ketch').controller('votingController', ['$scope', '$http', funct
 	// make it a ballot box that users open on a click
 	// putting paper in a ballot box
 
-	var server ='http://159.203.69.177/'
+	var server ='http://159.203.69.177'
 
 // style roster items? not super necessary
 // pre-routed rating mode; demo-only bullshit
