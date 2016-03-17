@@ -103,7 +103,7 @@ mod.rawRoster = function(req, res) {
 mod.deepRoster = function(req, res) {
 	var deep = []
 	Team.findById(req.body.team)
-		.then(function(teamDoc) {
+		.exec(function(err, teamDoc) {
 			teamDoc.roster.forEach(function(playerID) {
 				Player.findById(playerID)
 					.then(function(playerDoc) {

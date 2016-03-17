@@ -19,16 +19,20 @@ angular.module('Ketch')
 			})
 	}
 
+	// $rootScope.team = { roster:
+		
+	// }
+
 	if (!$rootScope.bench) {
 		$rootScope.bench = []
 		$rootScope.field = []
 		$rootScope.score = [0, 0]
 		$rootScope.subMode = true
-		// if (!$rootScope.team) {
-			// $rootScope.team = '56e8f88ae89c9b5208b8f211' // Dark Side
-		loadGame()
-		
+		if (!$rootScope.team) {
+			$rootScope.team = '56e8f88ae89c9b5208b8f211' // Dark Side
+		loadGame()	
 	}
+
 
 	$scope.score = function(result) {
 		$rootScope.subMode = true
