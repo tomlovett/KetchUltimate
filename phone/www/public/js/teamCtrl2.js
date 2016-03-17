@@ -2,21 +2,6 @@ angular.module('Ketch').controller('teamController', ['$rootScope', '$scope', '$
 
 	var server = 'http://localhost:3000'
 
-	var roster = [
-		{
-			id    : 'playerID',
-			handle: 'handle',
-			gender: 'gender',
-		},
-	]
-
-	var teeeems = [
-		{
-			id  : 'teamID',
-			name: 'teamName',
-			roster: []
-		}
-	]
 	$scope.addTo = {}
 
 	if (!$rootScope.teams) {
@@ -25,16 +10,6 @@ angular.module('Ketch').controller('teamController', ['$rootScope', '$scope', '$
 		$rootScope.players = []
 	}
 
-	// var rosterTo = function() {
-	// 	$scope.editing.roster.forEach(function(playerID) {
-	// 		var index = $scope.editing.roster.indexOf(playerID)
-	// 		$http.post(server + '/api/fullPlayer', {player: playerID})
-	// 			.then(function(res) { 
-	// 				$scope.editing.roster[index] = res.data
-	// 			})
-	// 	})
-	// 	console.log('$scope.editing.roster: ', $scope.editing.roster)
-	// }
 
 	$scope.editTeam = function(team) {
 		if ($scope.editing) { $scope.editing = false }
@@ -43,7 +18,6 @@ angular.module('Ketch').controller('teamController', ['$rootScope', '$scope', '$
 			$http.post(server + '/api/deepRoster', {team: team.id})
 				.then(function(res) {
 					$scope.editing.roster = res.data
-					console.log('$scope.editing.roster: ', $scope.editing.roster)
 				})
 		}
 	}
@@ -53,6 +27,7 @@ angular.module('Ketch').controller('teamController', ['$rootScope', '$scope', '$
 			.then(function(res) {
 				$rootScope.teams.push(res.data) // {id, name, roster}
 				$scope.newTeam = {}
+				$scope.createdMessage = 'Team created!'
 			})
 	}
 
@@ -79,7 +54,6 @@ angular.module('Ketch').controller('teamController', ['$rootScope', '$scope', '$
 
 
 	var pushToRosters = function(player) {
-		console.log('addTo: ', $scope.addTo)
 		$rootScope.teams.forEach(function(team) {
 			if ($scope.addTo[team.name]) {
 				$http.post(server + '/api/intoRoster', {
@@ -125,5 +99,17 @@ angular.module('Ketch').controller('teamController', ['$rootScope', '$scope', '$
 				})
 		})
 	}
+
+	$scope.toGame = function() {
+		// verify active team
+			// verify 
+		// setGameMisc
+		$state.go('game.liveGame')
+	}
+
+	// IWASAFREETA
+	// NOHELP-NOPROBLEM
+	// linger on those views
+		// won't have to sort
 
 }])

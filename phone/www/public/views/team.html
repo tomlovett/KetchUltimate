@@ -1,35 +1,13 @@
 <ion-view>
-	<div class="row">
-		<a class="col" ui-sref="game">Start tha mothafucking game</a>
-	</div>
-	<div class="row">
-		<div class="col">
-			<a class="button button-small" ui-sref="team.createPlayer">Create Player</a>
-		</div>
-		<div class="col">
-			<a class="button button-small" ui-sref="team.editRoster">Edit Teams</a>
-		</div>
-		<div class="col">
-			<a class="button button-small" ui-sref="team.createTeam">Create Team</a>	
-		</div>
+
+	<div class="button-bar">
+		<a class="button button-small" ui-sref="team.createPlayer">Create Player</a>
+		<a class="button button-small" ui-sref="team.editRoster">Edit Roster</a>
+		<a class="button button-small" ui-sref="team.createTeam">Create Team</a>	
+		<!-- dark grey? -->
 	</div>
 	<div ui-view></div>
+	<div class="bar button-bar bar-footer" style="background-color: black; border: none">
+		<button style="text-align: center;" class="button button-balanced dark"  ui-sref="game.liveGame">Game on!</button>
+	</div>
 </ion-view>
-
-
-<!-- Manage Team -->
-	<!-- add players -->
-	<!-- pop players -->
-	<!-- edit players -->
-		<!-- attach emails/edit -->
-		<!-- can't edit verified players -->
-<!-- create Team -->
-<!-- create Player -->
-<!-- Add/Drop players -->
-
-<!-- QuickGame -->
-	<!-- QuickAdd -->
-		<!-- type in name -> submit M/F -> start new one; Done below it -->
-		<!-- display roster below -->
-	<!-- Game (quick mode) -->
-		<!-- quickAdd players -->

@@ -32,22 +32,23 @@ var pointSchema = mongoose.Schema({
 })
 
 var gameSchema = mongoose.Schema({
-	team        :  {type: mongoose.Schema.ObjectId, ref: 'Team'},
-	score       :  Array,
+	team        : {type: mongoose.Schema.ObjectId, ref: 'Team'},
+	opponent	: String,
+	score       : Array,
 	roster      : [{type: mongoose.Schema.ObjectId, ref: 'Player'}],
 	pointHistory: [{type: mongoose.Schema.ObjectId, ref: 'Point'}],
 	livePoint   :  {type: mongoose.Schema.ObjectId, ref: 'Point'},
 	misc        : {}, 
 })
 
-var ratingSchema = mongoose.Schema({
+var ratingSchema = mongoose.Schema({ // ratings of player by others
 	playerID: {type: mongoose.Schema.ObjectId, ref: 'Player'},
 	ratings : {},
 })
 
-var voteSchema = mongoose.Schema({
+var ballotSchema = mongoose.Schema({ // votes cast by player
 	playerID: {type: mongoose.Schema.ObjectId, ref: 'Player'},
-	answers : {},
+	answers : {}, // type -> num -> val
 })
 
 module.exports = {
@@ -56,5 +57,5 @@ module.exports = {
 	Game  : mongoose.model('Game',   gameSchema),
 	Point : mongoose.model('Point',  pointSchema),
 	Rating: mongoose.model('Rating', ratingSchema),
-	Vote  : mongoose.model('Vote',   voteSchema),
+	Ballot: mongoose.model('Ballot', ballotSchema),
 }

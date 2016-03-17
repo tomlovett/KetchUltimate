@@ -29,6 +29,11 @@ angular.module('Ketch')
 				templateUrl : '/public/views/game.html',
 				controller  : 'game'
 			})
+			.state('game.intro', {
+				url         : '/intro',
+				templateUrl : '/public/views/snippets/game/gameIntro.html',
+				controller  : 'game'
+			})			
 			.state('game.liveGame', {
 				url         : '/liveGame',
 				templateUrl : '/public/views/snippets/game/liveGame.html',
@@ -69,7 +74,7 @@ angular.module('Ketch')
 			.state('ratingMode' , {
 				url         : '/rating',
 				templateUrl : '/public/views/ratings.html',
-				controller  : 'ratingController'
+				controller  : 'votingController'
 			})
 		$urlRouterProvider.otherwise('/login')
 	})

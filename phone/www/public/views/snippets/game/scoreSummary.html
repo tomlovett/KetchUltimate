@@ -4,9 +4,8 @@
 
 <div class="row" ng-repeat="point in $root.gameSummary">
 	<div class="col col-40">
-		<div ng-show="point.result" ng-click="expand($index)">Time: {{point.totalTime}}</div>
-		<div ng-show="expandPoints[$index]">
-			<p>Line: <span ng-repeat="player in point.playersOn">{{player.handle}} </span></p>
+		<div ng-show="point.result">
+			<p>Line: <span ng-repeat="player in point.line">{{player.handle}} </span></p>
 			<p>{{point.stats}}</p>
 		</div>
 	</div>
@@ -16,9 +15,9 @@
 	</div>
 
 	<div class="col col-40">
-		<div ng-hide="point.result" ng-click="expand($index)">Time: {{point.totalTime}}</div>
-		<div ng-show="expandPoints[$index]">
-			<p>Line: <span ng-repeat="player in point.playersOn">{{player.handle}} </span></p>
+		<div ng-hide="point.result">
+			<p>Line: 
+			<span ng-repeat="player in point.line">{{player.handle}} </span></p>
 			<p>{{point.stats}}</p>
 		</div>
 	</div>

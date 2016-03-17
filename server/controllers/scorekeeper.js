@@ -1,6 +1,6 @@
-var Models = require('../models/models.js')
 var _      = require('underscore')
-var Game   = Models['Game'],
+var Models = require('../models/models.js')
+var	Game   = Models['Game'],
 	Point  = Models['Point'],
 	Team   = Models['Team'],
 	Player = Models['Player']
@@ -9,7 +9,7 @@ var mod = {}
 
 // Functionality
 mod.newGame = function(req, res) {
-	var game = new Game({team: req.body.team, score: [0, 0]})
+	var game = new Game({team: req.body.team, opponent: req.body.opponent, score: [0, 0]})
 	var stats = {drop: [], throwaway: [], D: [], goldStar: []} 
 	var newPoint = new Point({stats: stats, score: [0, 0]})
 	newPoint.save().then(function(pointDoc) {
@@ -24,11 +24,10 @@ mod.newGame = function(req, res) {
 }
 
 mod.markScore = function(req, res) {
+	// could re-organize but don't want to risk breaking things
     Game.findById(req.body.game, function(err, gameDoc) {
 		Point.findById(req.body.point, function(err, pointDoc) {
 			pointDoc.result = req.body.result
-			gameDoc.roster = _.union(gameDoc.roster, pointDoc.line)
-			// union just appending
 			gameDoc.pointHistory.push(pointDoc)
 			var stats = {drop: [], throwaway: [], D: [], goldStar: []} 
 			var newPoint = new Point({stats: stats, score: req.body.score})
@@ -37,9 +36,7 @@ mod.markScore = function(req, res) {
 			gameDoc.score = req.body.score
 			pointDoc.save(function(err, pointTwo) {
 				gameDoc.save(function() {
-					res.send({
-						point: gameDoc.livePoint,
-					})
+					res.send({ point: gameDoc.livePoint })
 				})
 			})
     	})
@@ -66,10 +63,16 @@ mod.setLine = function(req, res) {
 
 mod.closeGame = function(req, res) {
 	// needs re-tooling
-	var team = req.body.team
-	team.gameHistory.push(team.liveGame)
-	team.liveGame    = null
-	team.save().then(function() { res.send(200) })
+	// adding all players in to game.roster
+	Game.findById(req.body.game, function(err, gameDoc) {
+		gameDoc.save().then(function() {
+			Team.findById(req.body.team, function(err, teamDoc) {
+				teamDoc.gameHistory.push(gameDoc)
+				teamDoc.liveGame = null
+				teamDoc.save().then(function() { res.send() })
+			})
+		})
+	})
 }
 
 mod.callHistory = function(req, res) {

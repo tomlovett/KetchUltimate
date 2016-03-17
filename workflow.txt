@@ -1,22 +1,10 @@
-controller as; moving data handling to factory
 
-// Team
-"team" factory not working; not actually calling in data
-	assignment statements only work local
-	factory not persisting at all
-// Game
-split up game.html in smaller files
-start new game
 
 // navbar
 
-//server
-	handling log-in request with no user
-	handling create request with existing user
+
 
 ---
-##Work
-rename files?
 //Welcome
 if email in database: email to verify player
 //Team
@@ -32,7 +20,15 @@ mergePlayers function
 ##demo full functionality, then how quickly it can be built-up
 ##Burning Macaroons, CANNED MEAT, Evil Superheroes, Thumbers in Thailand
 
-logging people in, confirming permissions in requests to server without compromising security
+
 email- players can only be edited by logging in as that player
 
-navbar controller
+navbar
+
+this shit doesn't even persist; I should ask for help with that issue
+---
+BIG PICTURE
+
+basic app that can be deployed to friends; create some customer desire/word-of-mouth, beta testing
+
+feedback/re-tooling; firming-up of logistical processes; email linking

@@ -3,14 +3,6 @@ angular.module('Ketch')
 
 	var server = 'http://localhost:3000'
 
-	var verifyGameReadiness = function() {
-		http.post(server + '/api/newGame')
-			.then(function(res) { $rootScope.game = res.data }) // gameID
-		$rootScope.bench = $rootScope.team.roster
-	}
-
-	// console.log('$rootScope: ', $rootScope)
-
 	var loadGame = function() {
 		$http.post(server + '/api/deepRoster', {team: $rootScope.team})
 			.then(function(res) {
@@ -78,9 +70,9 @@ angular.module('Ketch')
 
 	var recordStat = function() {
 		var data = {
-			point  : $rootScope.point,
-			player : $scope.player,
-			stat   : $scope.metric,
+			point : $rootScope.point,
+			player: $scope.player,
+			stat  : $scope.metric,
 		}
 		$http.post(server + '/api/markStat', data)
 		$scope.player = ''
@@ -125,6 +117,7 @@ angular.module('Ketch')
 						.then(function(pointRes) {
 							var index = $rootScope.gameSummary.indexOf(pointID)
 							$rootScope.gameSummary[index] = pointRes.data
+							// {line, stats, result, score}
 						})
 				})
 			})

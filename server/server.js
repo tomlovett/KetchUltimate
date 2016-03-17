@@ -112,7 +112,7 @@ app.isAuth = function(req, res, next){
 
 app.post('/api/signUp', signUp)
 app.post('/api/signIn', signIn)
-// API routes \\         //game.callTeam & game.callGame are middleware
+// API routes \\
 app.post('/api/newGame',   game.newGame)
 app.post('/api/markScore', game.markScore)
 app.post('/api/markStat',  game.markStat)

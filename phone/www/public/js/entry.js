@@ -2,17 +2,19 @@ angular.module('Ketch').controller('entry', ['$rootScope', '$scope', '$http', '$
 
 	var server = 'http://localhost:3000'
 
-	var handleLogin = function(res) {
-		if (!res.data.error) {
-			$rootScope.user = res.data.user
-			$http.post(server + '/api/playersTeams', {player: res.data.user})
-				.then(function(resTwo) {
-					$rootScope.teams = resTwo.data
-					if (resTwo.data.length) {$rootScope.team = resTwo.data[0]}
+	var handleLogin = function(loginRes) {
+		if (!loginRes.data.error) {
+			$rootScope.user = loginRes.data.user
+			$http.post(server + '/api/playersTeams', {player: loginRes.data.user})
+				.then(function(teamsRes) {
+					$rootScope.teams = teamsRes.data
+					if (teamsRes.data.length) {
+						$rootScope.team = teamsRes.data[0]
+					}
 				})
-			$state.go('team')
+			$state.go('team.createTeam')
 		} else {
-			console.log('bad login:', res.data.error)
+			console.log('bad login:', loginRes.data.error)
 			// error routing
 			$scope.errMsg = 'Error: Incorrect email/password combination.'
 			$scope.signin.password = ''
