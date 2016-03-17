@@ -34,7 +34,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/../phone/www'))
 
-app.use(cookieParser())
+// app.use(cookieParser())
 
 // Passport hooks into our app
 var bcrypt = require('bcryptjs')
