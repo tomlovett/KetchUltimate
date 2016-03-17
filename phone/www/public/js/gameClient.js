@@ -24,8 +24,8 @@ angular.module('Ketch')
 		$rootScope.field = []
 		$rootScope.score = [0, 0]
 		$rootScope.subMode = true
-		if (!$rootScope.team) {
-			$rootScope.team = '56e8f88ae89c9b5208b8f211' // Dark Side
+		// if (!$rootScope.team) {
+			// $rootScope.team = '56e8f88ae89c9b5208b8f211' // Dark Side
 			loadGame()
 		}
 	}
