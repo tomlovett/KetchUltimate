@@ -32,7 +32,7 @@ app.use(session({
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(__dirname + '/../www'))
+app.use(express.static(__dirname + '/../phone/www'))
 
 app.use(cookieParser())
 
@@ -140,7 +140,7 @@ app.post('/api/updatePlayer',  mgmt.updatePlayer)
 // app.post('/api/rating', ratingCtrl.recordRating)
 
 // Creating Server and Listening for Connections \\
-var port = 3000
+var port = 80
 app.listen(port, function(){
   console.log('Server running on port ' + port);
 
