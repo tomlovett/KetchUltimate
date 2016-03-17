@@ -1,7 +1,7 @@
 angular.module('Ketch')
 .controller('game', ['$rootScope', '$scope', '$http', '$state', function($rootScope, $scope, $http, $state) {
 
-	var server = 'http://159.203.69.177/'
+	var server = 'http://159.203.69.177'
 	$scope.opponent = 'SPAM'
 
 	var loadGame = function() {
