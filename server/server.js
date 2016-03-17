@@ -2,7 +2,7 @@
 var express    = require('express'),
     bodyParser = require('body-parser'),
     // logger     = require('morgan'),
-    mongoose   = require('mongoose'),
+    mongoose   = require('mongoose')
     // _          = require('underscore'),
     // cookieParser = require('cookie-parser')
 
