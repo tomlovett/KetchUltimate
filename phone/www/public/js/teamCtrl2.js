@@ -1,6 +1,6 @@
 angular.module('Ketch').controller('teamController', ['$rootScope', '$scope', '$http', function($rootScope, $scope, $http) {
 
-	var server = 'http://localhost:3000'
+	var server = 'http://45.55.173.156/'
 
 	$scope.addTo = {}
 
@@ -10,7 +10,6 @@ angular.module('Ketch').controller('teamController', ['$rootScope', '$scope', '$
 		$rootScope.players = []
 	}
 
-	$scope.opponent = 'SPAM'
 
 
 	$scope.editTeam = function(team) {
