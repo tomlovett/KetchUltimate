@@ -10,6 +10,8 @@ angular.module('Ketch').controller('teamController', ['$rootScope', '$scope', '$
 		$rootScope.players = []
 	}
 
+	$scope.opponent = 'SPAM'
+
 
 	$scope.editTeam = function(team) {
 		if ($scope.editing) { $scope.editing = false }

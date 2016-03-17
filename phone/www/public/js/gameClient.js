@@ -2,6 +2,7 @@ angular.module('Ketch')
 .controller('game', ['$rootScope', '$scope', '$http', '$state', function($rootScope, $scope, $http, $state) {
 
 	var server = 'http://localhost:3000'
+	$scope.opponent = 'SPAM'
 
 	var loadGame = function() {
 		$http.post(server + '/api/deepRoster', {team: $rootScope.team})
@@ -117,6 +118,17 @@ angular.module('Ketch')
 						.then(function(pointRes) {
 							var index = $rootScope.gameSummary.indexOf(pointID)
 							$rootScope.gameSummary[index] = pointRes.data
+							console.log($rootScope.gameSummary)
+							$rootScope.gameSummary.forEach(function(point) {
+								point.line.forEach(function(playerID) {
+									$http.post(server + '/api/playerDetails', 
+										{player: playerID})
+										.then(function(playerRes) {
+											var index = point.line.indexOf(playerID)
+											point.line[index] = playerRes.data
+										})
+								})
+							})
 							// {line, stats, result, score}
 						})
 				})
