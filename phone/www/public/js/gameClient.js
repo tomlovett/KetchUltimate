@@ -26,8 +26,8 @@ angular.module('Ketch')
 		$rootScope.subMode = true
 		// if (!$rootScope.team) {
 			// $rootScope.team = '56e8f88ae89c9b5208b8f211' // Dark Side
-			loadGame()
-		}
+		loadGame()
+		
 	}
 
 	$scope.score = function(result) {
