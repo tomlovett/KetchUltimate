@@ -28,6 +28,7 @@ angular.module('Ketch').controller('teamController', ['$rootScope', '$scope', '$
 			.then(function(res) {
 				$rootScope.teams.push(res.data) // {id, name, roster}
 				$scope.newTeam = {}
+				$rootScope.team = res.data
 				$scope.createdMessage = 'Team created!'
 			})
 	}

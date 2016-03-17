@@ -1,10 +1,10 @@
 // Requires \\
 var express    = require('express'),
     bodyParser = require('body-parser'),
-    logger     = require('morgan'),
+    // logger     = require('morgan'),
     mongoose   = require('mongoose'),
     _          = require('underscore'),
-    cookieParser = require('cookie-parser')
+    // cookieParser = require('cookie-parser')
 
 var passport   = require('passport')
     // passportConfig = require('./config/passportConfig.js'),
